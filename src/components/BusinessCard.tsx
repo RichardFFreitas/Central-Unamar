@@ -1,14 +1,16 @@
 
 import { Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BusinessCardProps {
+  id?: string;
   name: string;
   category: string;
   rating: number;
   image: string;
 }
 
-export default function BusinessCard({ name, category, rating, image }: BusinessCardProps) {
+export default function BusinessCard({ id = "1", name, category, rating, image }: BusinessCardProps) {
   return (
     <div className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden animate-fade-up">
       <div className="aspect-video relative overflow-hidden">
@@ -29,9 +31,12 @@ export default function BusinessCard({ name, category, rating, image }: Business
             <span className="text-sm font-medium text-gray-600">{rating}</span>
           </div>
         </div>
-        <button className="mt-4 w-full py-2 px-4 bg-accent hover:bg-accent-hover text-primary font-medium rounded transition-colors">
+        <Link
+          to={`/business/${id}`}
+          className="mt-4 block w-full py-2 px-4 bg-accent hover:bg-accent-hover text-primary font-medium rounded text-center transition-colors"
+        >
           Learn More
-        </button>
+        </Link>
       </div>
     </div>
   );
