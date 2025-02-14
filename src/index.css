@@ -98,4 +98,24 @@
   body {
     @apply bg-background text-foreground;
   }
+  .ticker {
+    @apply bg-gray-100 py-2 overflow-hidden whitespace-nowrap;
+  }
+
+  .ticker-content {
+    @apply inline-flex space-x-8 animate-ticker;
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
 }
