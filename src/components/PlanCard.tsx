@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 
 interface PlanCardProps {
   name: string;
-  price: number;
+  price: string;
   features: string[];
   isPopular?: boolean;
 }
@@ -13,13 +13,13 @@ export default function PlanCard({ name, price, features, isPopular }: PlanCardP
     <div className={`relative bg-white rounded-lg ${isPopular ? 'ring-2 ring-primary shadow-lg' : 'border border-gray-200'} p-6 animate-fade-up`}>
       {isPopular && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm font-medium px-3 py-1 rounded-full">
-          Most Popular
+          Recomendado
         </span>
       )}
       <div className="text-center">
         <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
         <div className="mt-4 flex items-baseline justify-center">
-          <span className="text-4xl font-bold text-gray-900">${price}</span>
+          <span className="text-4xl font-bold text-gray-900">R${price}</span>
           <span className="ml-1 text-gray-500">/month</span>
         </div>
       </div>
