@@ -1,32 +1,45 @@
-
-import { Search } from "lucide-react";
-import { useState } from "react";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search } from 'lucide-react';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
+  initialQuery?: string;
 }
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [query, setQuery] = useState("");
+export default function SearchBar({ onSearch, initialQuery = '' }: SearchBarProps) {
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const navigate = useNavigate();
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
-    onSearch?.(newQuery);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (searchQuery.trim()) {
+      // Se estiver na página businesses, usa o onSearch
+      if (window.location.pathname === '/businesses') {
+        onSearch?.(searchQuery);
+      } else {
+        // Se não, redireciona para businesses com o query parameter
+        navigate(`/businesses?search=${encodeURIComponent(searchQuery)}`);
+      }
+    }
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="relative">
-        <input
-          type="text"
-          value={query}
-          onChange={handleSearch}
-          placeholder="Search businesses by name, category, or location..."
-          className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-        />
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="relative">
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Buscar comércios..."
+        className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+      />
+      <button
+        type="submit"
+        className="absolute left-3 top-1/2 -translate-y-1/2"
+      >
+        <Search className="w-5 h-5 text-gray-400" />
+      </button>
+    </form>
   );
 }
