@@ -1,40 +1,78 @@
-import React from 'react';
-import { Star, MapPin, Globe, Phone } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, MapPin, Globe, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-interface BusinessCardProps {
-  id:string;
-  name: string;
-  category: string;
-  rating: number;
-  image: string;
-  location: string;
-  whatsapp?: string;
-  website?: string;
-}
+import { Business } from '@/interfaces/Business';
 
-const BusinessCard = ({ 
+const BusinessCard = ({
   id,
-  name, 
-  category, 
-  rating, 
-  image, 
-  location,
-  whatsapp = "+5521999999999",
-}: BusinessCardProps) => {
+  name,
+  category,
+  rating,
+  photos = [],
+  address,
+  telephone,
+  plan,
+}: Business) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? photos.length - 1 : prevIndex - 1
+    );
+  };
+
+
   return (
     <div className="relative bg-white rounded-lg overflow-hidden group h-[300px]">
-      {/* Image */}
-      <img 
-        src={image} 
-        alt={name} 
-        className="w-full h-full object-cover"
-      />
-      
-      {/* Featured Badge */}
-      <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-medium z-10">
-        Featured
+      {/* photos */}
+      <div className="relative h-full w-full">
+        {photos.length === 0 ? (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">Sem fotos</span>
+          </div>
+        ) : (
+          photos.map((photo, index) => (
+            <img
+              key={index}
+              src={photo}
+              alt={`${name} - Foto ${index + 1}`}
+              className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          ))
+        )}
+
+        {/* Controles do Carrossel (se houver mais de uma foto) */}
+        {photos.length > 1 && (
+          <>
+            <button
+              onClick={handlePrevImage}
+              className=" z-50 absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="z-50 absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </>
+        )}
       </div>
+
+      {/* Destaque Badge - Só aparece se plan for enterprise */}
+      {plan === 'enterprise' && (
+        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-medium z-10">
+          Destaque
+        </div>
+      )}
 
       {/* Hover Content */}
       <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-between">
@@ -49,14 +87,14 @@ const BusinessCard = ({
           <p className="text-white/80 text-sm mb-2">{category}</p>
           <div className="flex items-center text-white/80 text-sm">
             <MapPin className="w-4 h-4 mr-1" />
-            {location}
+            {address}
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="space-y-2">
-          <a 
-            href={`https://wa.me/${whatsapp}`}
+          <a
+            href={`https://wa.me/${telephone}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"

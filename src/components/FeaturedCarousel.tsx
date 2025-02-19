@@ -2,16 +2,7 @@ import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import BusinessCard from './BusinessCard';
-
-interface Business {
-  name: string;
-  category: string;
-  rating: number;
-  image: string;
-  location?: string;
-  whatsapp?: string;
-  website?: string;
-}
+import { Business } from '@/interfaces/Business';
 
 interface FeaturedCarouselProps {
   businesses: Business[];

@@ -15,7 +15,7 @@ interface Business {
   rating: number;
   address: string;
   whatsapp: string;
-  image: string;
+  photos: string;
   telephone?: string;
 }
 export default function Businesses() {
@@ -107,7 +107,7 @@ export default function Businesses() {
                   name={business.name}
                   category={business.category}
                   rating={business.rating || 0}
-                  image={business.image}
+                  photos={business.photos}
                   location={business.address}
                   whatsapp={business.whatsapp}
                   telephone={business.telephone}
