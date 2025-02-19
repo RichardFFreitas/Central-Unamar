@@ -1,7 +1,10 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useSupabase } from "@/hooks/useSupabase";
+import { useNavigate } from "react-router-dom";
 import { Plus, Upload, X } from "lucide-react";
+import { CATEGORIES } from "@/constantes/categories";
+import AddressInput from "./AdressInput";
 
 interface BusinessFormData {
   name: string;
@@ -10,21 +13,13 @@ interface BusinessFormData {
   category: string;
   description: string;
   selectedPlan: "basic" | "professional" | "enterprise";
-  photos: string[];
+  photos: { file: File; preview: string }[];
 }
-
-const CATEGORIES = [
-  "Restaurant",
-  "Hotel",
-  "Retail",
-  "Service",
-  "Entertainment",
-  "Healthcare",
-  "Other",
-];
 
 export default function BusinessRegistrationForm() {
   const { toast } = useToast();
+  const { createBusiness } = useSupabase();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
     address: "",
@@ -45,8 +40,10 @@ export default function BusinessRegistrationForm() {
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      // For now, we'll just store the file names. In a real app, we'd upload to storage
-      const newPhotos = Array.from(files).map((file) => URL.createObjectURL(file));
+      const newPhotos = Array.from(files).map(file => ({
+        file,
+        preview: URL.createObjectURL(file)
+      }));
       setFormData((prev) => ({
         ...prev,
         photos: [...prev.photos, ...newPhotos],
@@ -63,17 +60,75 @@ export default function BusinessRegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we would normally submit to an API
-    toast({
-      title: "Registration Submitted",
-      description: "Your business registration has been received.",
-    });
+
+    try {
+      const businessData = {
+        name: formData.name,
+        address: formData.address,
+        telephone: formData.telephone,
+        category: formData.category,
+        description: formData.description,
+        plan: formData.selectedPlan,
+        photos: formData.photos, // Passa os arquivos reais
+      };
+
+      const result = await createBusiness(businessData);
+
+      if (result) {
+        toast({
+          title: "Sucesso",
+          description: "Negócio cadastrado com sucesso!",
+        });
+        navigate("/businesses");
+      }
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Erro ao cadastrar negócio. Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
+  const handlePlanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const plan = e.target.value as "basic" | "professional" | "enterprise";
+    setFormData(prev => ({
+      ...prev,
+      selectedPlan: plan
+    }));
+  };
+
+  const formatPhoneNumber = (value: string) => {
+    // Remove o prefixo +55 se existir
+    const withoutPrefix = value.replace('+55', '')
+
+    // Remove tudo que não é número
+    const numbers = withoutPrefix.replace(/\D/g, '')
+
+    // Se estiver vazio, retorna apenas +55
+    if (!numbers) return '+55'
+
+    // Adiciona +55 ao número limpo
+    return `+55${numbers}`
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedPhone = formatPhoneNumber(e.target.value)
+    setFormData(prev => ({
+      ...prev,
+      telephone: formattedPhone
+    }))
+  }
+
+  useEffect(() => {
+    return () => {
+      formData.photos.forEach(photo => URL.revokeObjectURL(photo.preview));
+    };
+  }, [formData.photos]);
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Business Name</label>
+        <label className="block text-sm font-medium text-gray-700">Nome do Comércio</label>
         <input
           type="text"
           name="name"
@@ -85,31 +140,29 @@ export default function BusinessRegistrationForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Address</label>
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleInputChange}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
+        <label className="block text-sm font-medium text-gray-700">Endereço</label>
+        <AddressInput
+          onAddressSelect={(address) =>
+            setFormData(prev => ({ ...prev, address }))
+          }
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Telephone</label>
+        <label className="block text-sm font-medium text-gray-700">Telefone</label>
         <input
           type="tel"
           name="telephone"
           value={formData.telephone}
-          onChange={handleInputChange}
+          onChange={handlePhoneChange}
+          placeholder="+55"
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Category</label>
+        <label className="block text-sm font-medium text-gray-700">Categoria</label>
         <select
           name="category"
           value={formData.category}
@@ -127,24 +180,23 @@ export default function BusinessRegistrationForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-gray-700">Descrição</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleInputChange}
           rows={4}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Photos</label>
+        <label className="block text-sm font-medium text-gray-700">Fotos</label>
         <div className="mt-1 grid grid-cols-2 md:grid-cols-4 gap-4">
           {formData.photos.map((photo, index) => (
             <div key={index} className="relative">
               <img
-                src={photo}
+                src={photo.preview} 
                 alt={`Business photo ${index + 1}`}
                 className="h-24 w-full object-cover rounded-lg"
               />
@@ -164,6 +216,7 @@ export default function BusinessRegistrationForm() {
               accept="image/*"
               onChange={handlePhotoUpload}
               className="hidden"
+              required
             />
             <Plus className="w-6 h-6 text-gray-400" />
           </label>
@@ -171,64 +224,54 @@ export default function BusinessRegistrationForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Subscription Plan</label>
+        <label className="block text-sm font-medium text-gray-700">Escolha seu Plano</label>
         <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <label className="relative flex cursor-pointer rounded-lg border border-gray-300 p-4 hover:border-primary">
+          <label className={`relative flex cursor-pointer rounded-lg border p-4 ${formData.selectedPlan === "basic" ? "border-primary ring-2 ring-primary" : "border-gray-300"
+            } hover:border-primary`}>
             <input
               type="radio"
               name="selectedPlan"
               value="basic"
               checked={formData.selectedPlan === "basic"}
-              onChange={handleInputChange}
+              onChange={handlePlanChange}
               className="sr-only"
             />
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-gray-900">Basic</span>
-              <span className="text-sm text-gray-500">$24/month</span>
+              <span className="text-sm font-medium text-gray-900">Básico</span>
+              <span className="text-sm text-gray-500">R$24,99/mês</span>
             </div>
-            <span
-              className={`absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-primary ${
-                formData.selectedPlan === "basic" ? "ring-primary" : ""
-              }`}
-            />
           </label>
-          <label className="relative flex cursor-pointer rounded-lg border border-gray-300 p-4 hover:border-primary">
+
+          <label className={`relative flex cursor-pointer rounded-lg border p-4 ${formData.selectedPlan === "professional" ? "border-primary ring-2 ring-primary" : "border-gray-300"
+            } hover:border-primary`}>
             <input
               type="radio"
               name="selectedPlan"
               value="professional"
               checked={formData.selectedPlan === "professional"}
-              onChange={handleInputChange}
+              onChange={handlePlanChange}
               className="sr-only"
             />
             <div className="flex flex-col">
               <span className="text-sm font-medium text-gray-900">Professional</span>
-              <span className="text-sm text-gray-500">$54/month</span>
+              <span className="text-sm text-gray-500">R$54,99/mês</span>
             </div>
-            <span
-              className={`absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-primary ${
-                formData.selectedPlan === "professional" ? "ring-primary" : ""
-              }`}
-            />
           </label>
-          <label className="relative flex cursor-pointer rounded-lg border border-gray-300 p-4 hover:border-primary">
+
+          <label className={`relative flex cursor-pointer rounded-lg border p-4 ${formData.selectedPlan === "enterprise" ? "border-primary ring-2 ring-primary" : "border-gray-300"
+            } hover:border-primary`}>
             <input
               type="radio"
               name="selectedPlan"
               value="enterprise"
               checked={formData.selectedPlan === "enterprise"}
-              onChange={handleInputChange}
+              onChange={handlePlanChange}
               className="sr-only"
             />
             <div className="flex flex-col">
               <span className="text-sm font-medium text-gray-900">Enterprise</span>
-              <span className="text-sm text-gray-500">$74/month</span>
+              <span className="text-sm text-gray-500">R$74,99/mês</span>
             </div>
-            <span
-              className={`absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-primary ${
-                formData.selectedPlan === "enterprise" ? "ring-primary" : ""
-              }`}
-            />
           </label>
         </div>
       </div>
@@ -237,7 +280,7 @@ export default function BusinessRegistrationForm() {
         type="submit"
         className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-hover transition-colors"
       >
-        Register Business
+        Registrar Comércio
       </button>
     </form>
   );
