@@ -6,18 +6,10 @@ import BusinessCard from "@/components/BusinessCard";
 import { useSupabase } from "@/hooks/useSupabase";
 import { CATEGORIES } from "@/constantes/categories";
 import { LOCATIONS } from "@/constantes/locations";
+import { Business } from "@/interfaces/Business";
+import { LoaderCircle } from "lucide-react";
 
 
-interface Business {
-  id: number;
-  name: string;
-  category: string;
-  rating: number;
-  address: string;
-  whatsapp: string;
-  photos: string;
-  telephone?: string;
-}
 export default function Businesses() {
   const { getBusinesses } = useSupabase();
   const [businesses, setBusinesses] = useState<Business[]>([]);
@@ -57,7 +49,7 @@ export default function Businesses() {
       <div className="min-h-screen bg-gray-50 pt-24 pb-16">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="text-center">Carregando...</div>
+            <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>
           ) : (
             <>
               <div className="max-w-4xl mx-auto mb-8">
@@ -108,9 +100,10 @@ export default function Businesses() {
                   category={business.category}
                   rating={business.rating || 0}
                   photos={business.photos}
-                  location={business.address}
+                  address={business.address}
                   whatsapp={business.whatsapp}
                   telephone={business.telephone}
+                  plan={business.plan}
                   />
                 ))}
               </div>
