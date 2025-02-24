@@ -9,6 +9,7 @@ const SUBSCRIPTION_PLANS = [
       "Link do Whatsapp",
       "1 Foto do comércio.",
     ],
+    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2024%2C90",
   },
   {
     name: "Professional",
@@ -20,6 +21,7 @@ const SUBSCRIPTION_PLANS = [
       "Suporte Prioritário",
     ],
     isPopular: true,
+    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2054%2C90",
   },
   {
     name: "Enterprise",
@@ -33,6 +35,7 @@ const SUBSCRIPTION_PLANS = [
       "Pagina Própria",
       "Integração com redes sociais"
     ],
+    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2074%2C90",
   },
 ];
 
