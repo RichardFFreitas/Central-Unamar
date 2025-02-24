@@ -59,7 +59,7 @@ const Index = () => {
             Encontre os Melhores comércios de Unamar!
           </h1>
           <div className="max-w-2xl mx-auto">
-            <SearchBar />
+            <SearchBar  />
             <a href="https://wa.me/5522997586193?text=Ol%C3%A1%2C%20vim%20pela%20central%20unamar%2C%20e%20gostaria%20de%20saber%20como%20posso%20anunciar%20tamb%C3%A9m" >
               <button className="mt-8 bg-red-600 text-white px-8 py-3 rounded font-semibold hover:bg-red-700 transition-colors">
                 Fale com um de nossos atendentes.
@@ -68,8 +68,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+
       {/* Featured Businesses */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 ml-64">
+      <section className="mx-auto px-4 py-4 sm:px-6 lg:px-8 xl:mr-80 ">
         {featuredBusinesses.length > 0 && (
           <>
             <h2 className="text-3xl font-bold text-gray-900 mb-8">Comércios em destaque</h2>
