@@ -26,6 +26,7 @@ const BusinessCard = ({
     );
   };
 
+  const whatsapp =  telephone + "?text=Ol%C3%A1%20vim%20pelo%20site%20central%20unamar"
 
   return (
     <div className="relative bg-white rounded-lg overflow-hidden group h-[300px]">
@@ -94,7 +95,7 @@ const BusinessCard = ({
         {/* Action Buttons */}
         <div className="space-y-2">
           <a
-            href={`https://wa.me/${telephone}`}
+            href={`https://wa.me/${whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"
@@ -104,12 +105,11 @@ const BusinessCard = ({
           </a>
           <Link
             to={`/business/${id}`}
-            target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
           >
             <Globe className="w-4 h-4 mr-2" />
-            Visit Website
+            Visitar a Pagina
           </Link>
         </div>
       </div>
