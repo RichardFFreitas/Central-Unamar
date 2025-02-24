@@ -1,53 +1,38 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
-import { Star, MapPin, Phone, Globe, Facebook, Instagram, Twitter } from "lucide-react";
+import { Star, MapPin, Phone, Globe, Facebook, Instagram, Twitter, LoaderCircle } from "lucide-react";
+import { useSupabase } from "@/hooks/useSupabase";
+import { Business } from "@/interfaces/Business";
 
-// Temporary mock data - will be replaced with real data from backend
-const MOCK_BUSINESS = {
-  id: "1",
-  name: "Ocean View Restaurant",
-  category: "Restaurant",
-  rating: 4.8,
-  description: "Experience the finest seafood with a breathtaking ocean view. Our restaurant offers fresh, locally-sourced ingredients prepared by expert chefs.",
-  address: "123 Beach Road, Unamar Beach",
-  telephone: "+55 (21) 99999-9999",
-  website: "https://oceanview.example.com",
-  socialMedia: {
-    facebook: "oceanview",
-    instagram: "oceanviewunamar",
-    twitter: "oceanview",
-  },
-  photos: [
-    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
-    "https://images.unsplash.com/photo-1544148103-0773bf10d330?w=800&q=80",
-    "https://images.unsplash.com/photo-1574936145840-28808d77a0b6?w=800&q=80",
-  ],
-  reviews: [
-    {
-      id: "1",
-      author: "John Doe",
-      rating: 5,
-      comment: "Amazing food and service! The view is breathtaking.",
-      date: "2024-02-15",
-    },
-    {
-      id: "2",
-      author: "Jane Smith",
-      rating: 4,
-      comment: "Great atmosphere and delicious seafood. A bit pricey but worth it.",
-      date: "2024-02-10",
-    },
-  ],
-};
 
 export default function BusinessProfile() {
+  const { getBusiness } = useSupabase();
   const { id } = useParams();
-  const [selectedPhoto, setSelectedPhoto] = useState(MOCK_BUSINESS.photos[0]);
+  const [business, setBusiness] = useState<Business | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<string>("");
 
-  // In a real app, we would fetch the business data based on the ID
-  const business = MOCK_BUSINESS;
+  
+  useEffect(() => {
+    const fetchBusiness = async () => {
+      if (id) {
+        const data = await getBusiness(id);
+        if (data) {
+          setBusiness(data);
+          setSelectedPhoto(data.photos[0] || "");
+        }
+      }
+    };
+    fetchBusiness();
+  }, [id, getBusiness]);
+
+  if (!business) {
+    return <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>;
+  }
+
+  const whatsapp = business.telephone + "?text=Ol%C3%A1%20vim%20pelo%20site%20central%20unamar"
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -69,9 +54,8 @@ export default function BusinessProfile() {
                   <button
                     key={index}
                     onClick={() => setSelectedPhoto(photo)}
-                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden ${
-                      selectedPhoto === photo ? "ring-2 ring-primary" : ""
-                    }`}
+                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden ${selectedPhoto === photo ? "ring-2 ring-primary" : ""
+                      }`}
                   >
                     <img src={photo} alt="" className="w-full h-full object-cover" />
                   </button>
@@ -103,23 +87,16 @@ export default function BusinessProfile() {
                   <Phone className="w-5 h-5" />
                   <span>{business.telephone}</span>
                 </div>
-                {business.website && (
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Globe className="w-5 h-5" />
-                    <a
-                      href={business.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      {business.website}
-                    </a>
-                  </div>
-                )}
+                <a href={`https://wa.me/${whatsapp}`} className="">
+                <button className="bg-green-400 px-2 py-2 rounded-full">
+                  Chamar no whatsapp
+                </button>
+                </a>
               </div>
 
               {/* Social Media */}
-              <div className="flex space-x-4 mt-6">
+
+              {/* <div className="flex space-x-4 mt-6">
                 {business.socialMedia.facebook && (
                   <a
                     href={`https://facebook.com/${business.socialMedia.facebook}`}
@@ -140,24 +117,15 @@ export default function BusinessProfile() {
                     <Instagram className="w-6 h-6" />
                   </a>
                 )}
-                {business.socialMedia.twitter && (
-                  <a
-                    href={`https://twitter.com/${business.socialMedia.twitter}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-primary"
-                  >
-                    <Twitter className="w-6 h-6" />
-                  </a>
-                )}
-              </div>
+              </div> */}
             </div>
 
             {/* Reviews */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Reviews</h2>
               <div className="space-y-6">
-                {business.reviews.map((review) => (
+                Sem reviews no momento
+                {/* {business.reviews.map((review) => (
                   <div key={review.id} className="border-b border-gray-200 last:border-0 pb-6 last:pb-0">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium text-gray-900">{review.author}</span>
@@ -171,7 +139,7 @@ export default function BusinessProfile() {
                       {new Date(review.date).toLocaleDateString()}
                     </span>
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
           </div>
