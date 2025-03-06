@@ -10,6 +10,7 @@ import BusinessRegistration from "./pages/BusinessRegistration";
 import Businesses from "./pages/Businesses";
 import BusinessProfile from "./pages/BusinessProfile";
 import News from "./pages/News";
+import NewsProfile from "./pages/NewsProfile";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import TestSupabase from "./components/TestSupabase";
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/businesses" element={<Businesses />} />
           <Route path="/business/:id" element={<BusinessProfile />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsProfile />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/plans" element={<PlansPage />} />
           <Route path="*" element={<NotFound />} />
