@@ -1,9 +1,16 @@
-import { Menu, Search, X } from "lucide-react";
+import { Menu, Search, X, User2Icon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import LoginPopup from "./LoginPopUp";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+
+  const toggleLoginPopup = () => {
+    setIsLoginPopupOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -54,13 +61,23 @@ export default function Header() {
               >
                 Contato
               </Link>
-              <Link
-                to="/register"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition-colors"
-              >
-                Registre seu Comércio
-              </Link>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="btn-login px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover">
+                    Login
+                  </button>
+                </PopoverTrigger>
+
+                <PopoverContent
+                  align="center"
+                  sideOffset={4}
+                  className="w-80 p-4 bg-white rounded-md shadow-lg"
+                >
+                  <LoginPopup />
+                </PopoverContent>
+              </Popover>
             </nav>
+            {isLoginPopupOpen && <LoginPopup />}
 
             {/* Mobile Menu Button */}
             <button
