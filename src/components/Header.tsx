@@ -37,6 +37,12 @@ export default function Header() {
                 Planos
               </Link>
               <Link
+                to="/news"
+                className="text-white hover:text-primary transition-colors"
+              >
+                Notícias
+              </Link>
+              <Link
                 to="/about"
                 className="text-white hover:text-primary transition-colors"
               >
@@ -84,31 +90,37 @@ export default function Header() {
                 to="/businesses"
                 className="text-White hover:text-primary transition-colors"
               >
-                Businesses
+                Comércios
               </Link>
               <Link
                 to="/plans"
                 className="text-White hover:text-primary transition-colors"
               >
-                Plans
+                Planos
+              </Link>
+              <Link
+                to="/news"
+                className="text-white hover:text-primary transition-colors"
+              >
+                Notícias
               </Link>
               <Link
                 to="/about"
                 className="text-White hover:text-primary transition-colors"
               >
-                About
+                Sobre
               </Link>
               <Link
                 to="/contact"
                 className="text-White hover:text-primary transition-colors"
               >
-                Contact
+                Contato
               </Link>
               <Link
                 to="/register"
                 className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition-colors text-center"
               >
-                Register Business
+                Registre seu comércio
               </Link>
             </nav>
           </div>
