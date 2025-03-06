@@ -1,6 +1,8 @@
 
 import { Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface NewsCardProps {
   id: string;
