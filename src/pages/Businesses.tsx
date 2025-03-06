@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/BusinessSearchBar";
 import BusinessCard from "@/components/BusinessCard";
 import { useSupabase } from "@/hooks/useSupabase";
 import { CATEGORIES } from "@/constantes/categories";
@@ -17,8 +17,8 @@ export default function Businesses() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
   const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [selectedLocation, setSelectedLocation] = useState("Todos");
 
   useEffect(() => {
     loadBusinesses();
@@ -38,8 +38,8 @@ export default function Businesses() {
 
   const filteredBusinesses = businesses.filter((business) => {
     const matchesSearch = business.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || business.category === selectedCategory;
-    const matchesLocation = selectedLocation === "All" || business.address.includes(selectedLocation);
+    const matchesCategory = selectedCategory === "Todos" || business.category === selectedCategory;
+    const matchesLocation = selectedLocation === "Todos" || business.address.includes(selectedLocation);
     return matchesSearch && matchesCategory && matchesLocation;
   });
 
