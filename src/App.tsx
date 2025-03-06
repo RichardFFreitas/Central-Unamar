@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,32 +14,35 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import TestSupabase from "./components/TestSupabase";
 import PlansPage from "./pages/PlansPage";
+import { AuthContextProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/test-supabase" element={<TestSupabase />} />
-          <Route path="/register" element={<BusinessRegistration />} />
-          <Route path="/businesses" element={<Businesses />} />
-          <Route path="/business/:id" element={<BusinessProfile />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/news/:id" element={<NewsProfile />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/plans" element={<PlansPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <AuthContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/test-supabase" element={<TestSupabase />} />
+              <Route path="/register" element={<BusinessRegistration />} />
+              <Route path="/businesses" element={<Businesses />} />
+              <Route path="/business/:id" element={<BusinessProfile />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/news/:id" element={<NewsProfile />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/plans" element={<PlansPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </AuthContextProvider>
 );
 
 export default App;
