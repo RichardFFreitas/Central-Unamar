@@ -6,7 +6,7 @@ interface NewsCardProps {
   id: string;
   title: string;
   excerpt: string;
-  date: string;
+  date?: string;
   image: string;
   category: string;
 }
@@ -29,7 +29,7 @@ export default function NewsCard({ id, title, excerpt, date, image, category }: 
       <div className="p-6">
         <div className="flex items-center text-gray-500 text-sm mb-3">
           <Calendar className="w-4 h-4 mr-2" />
-          {new Date(date).toLocaleDateString()}
+          {date}
         </div>
         <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-600 mb-4 line-clamp-2">{excerpt}</p>
