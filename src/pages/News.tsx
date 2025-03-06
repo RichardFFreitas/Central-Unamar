@@ -4,6 +4,8 @@ import NewsCard from "@/components/NewsCard";
 import SearchBar from "@/components/NewsSearchBar";
 import { useSearchParams } from "react-router-dom";
 import { useSupabase } from "@/hooks/useSupabase";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const CATEGORIES = ["Todas", "Economia e negócios", "Eventos e cultura", "Esportes", "Segurança pública", "Clima e trânsito", "Saúde"];
 
@@ -15,16 +17,18 @@ export default function News() {
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [news, setNews] = useState([]);
 
-  // ✅ Buscar notícias do Supabase
   useEffect(() => {
     const fetchNews = async () => {
-      const data = await getNews();
-      if (data) setNews(data);
+      const formattedNewsData = news.map((news) => ({
+              ...news,
+              date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
+            }));
+            setNews(formattedNewsData || []);
     };
     fetchNews();
   }, [getNews]);
 
-  // ✅ Filtro de busca e categoria
+  
   const filteredNews = news.filter((item) => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "Todas" || item.category === selectedCategory;
