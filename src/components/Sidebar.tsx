@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSupabase } from "@/hooks/useSupabase";
 import { Business } from "@/interfaces/Business";
+import SearchBar from "./NewsSearchBar";
+import { News } from "@/interfaces/News";
 
-
-interface News {
-	id: number,
-	user_id: number,
-	title: string,
-	excerpt: string,
-	content: string,
-	category: string,
-	image: string,
-	created_at: string
-}
 
 export const Sidebar = () => {
 	const { getNews, getBusinesses } = useSupabase()
@@ -34,9 +25,10 @@ export const Sidebar = () => {
 	return (
 		<div className="invisible xl:visible ">
 			<div className="w-[300px] bg-white rounded-lg shadow-lg p-6 space-y-6">
-				<h2 className="font-semibold text-lg mb-4">Ultimas noticias de Unamar</h2>
+				<h2 className="font-semibold text-lg mb-4">Ultimas notícias de Unamar</h2>
 				<section>
 					<div className="space-y-4">
+					<SearchBar />
 						{allNews.length > 0 ? (
 							allNews.map((news) => (
 								<article className="group" key={news.id}>
