@@ -42,7 +42,7 @@ export function useSupabase() {
 
     return data.map(business => ({
       ...business,
-      photos: business.photos || [], // Se photos for null, usa um array vazio
+      photos: business.photos || [], 
     }));
   }
   
@@ -75,7 +75,7 @@ export function useSupabase() {
     }
   };
 
-  const getNews = async () => {
+  const getNews = async (id?: string) => {
     const {data, error} = await supabase
     .from('news')
     .select('*')
