@@ -35,15 +35,62 @@ export default function BusinessRegistrationForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  }; 
+  // VERSÃO SEM CONVERSÃO DE ARQUIVO
+  // const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const newPhotos = Array.from(files).map(file => ({
+  //       file,
+  //       preview: URL.createObjectURL(file)
+  //     }));
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       photos: [...prev.photos, ...newPhotos],
+  //     }));
+  //   }
+  // };
+  
+  const convertToWebP = (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0, img.width, img.height);
+  
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name.replace(/\.\w+$/, ".webp"), { type: "image/webp" }));
+            } else {
+              reject(new Error("Erro ao converter para WEBP"));
+            }
+          }, "image/webp", 0.8);
+        };
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
-
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      const newPhotos = Array.from(files).map(file => ({
-        file,
-        preview: URL.createObjectURL(file)
-      }));
+      const newPhotos = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const webpFile = await convertToWebP(file);
+          return {
+            file: webpFile,
+            preview: URL.createObjectURL(webpFile),
+          };
+        })
+      );
+  
       setFormData((prev) => ({
         ...prev,
         photos: [...prev.photos, ...newPhotos],
