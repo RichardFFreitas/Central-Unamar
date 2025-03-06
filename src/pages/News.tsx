@@ -1,48 +1,40 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import NewsCard from "@/components/NewsCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/NewsSearchBar";
+import { useSearchParams } from "react-router-dom";
+import { useSupabase } from "@/hooks/useSupabase";
 
-// Temporary mock data - will be replaced with backend data
-const MOCK_NEWS = [
-  {
-    id: "1",
-    title: "New Beach Cleanup Initiative Launches in Unamar",
-    excerpt: "Local community groups partner with businesses to keep our beaches clean and beautiful.",
-    date: "2024-02-14",
-    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=800&q=80",
-    category: "Environment",
-  },
-  {
-    id: "2",
-    title: "Unamar Cultural Festival Announced",
-    excerpt: "Annual celebration of local arts and culture set to take place next month.",
-    date: "2024-02-13",
-    image: "https://images.unsplash.com/photo-1473091534298-04dcbce3278c?w=800&q=80",
-    category: "Events",
-  },
-  {
-    id: "3",
-    title: "Local Businesses Report Tourism Surge",
-    excerpt: "Tourism numbers show significant increase in visitor activity compared to last year.",
-    date: "2024-02-12",
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=800&q=80",
-    category: "Business",
-  },
-];
-
-const CATEGORIES = ["All", "Environment", "Events", "Business", "Community", "Sports"];
+const CATEGORIES = ["Todas", "Economia e negócios", "Eventos e cultura", "Esportes", "Segurança pública", "Clima e trânsito", "Saúde"];
 
 export default function News() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const { getNews } = useSupabase();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [selectedCategory, setSelectedCategory] = useState("Todas");
+  const [news, setNews] = useState([]);
 
-  const filteredNews = MOCK_NEWS.filter((news) => {
-    const matchesSearch = news.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || news.category === selectedCategory;
+  // ✅ Buscar notícias do Supabase
+  useEffect(() => {
+    const fetchNews = async () => {
+      const data = await getNews();
+      if (data) setNews(data);
+    };
+    fetchNews();
+  }, [getNews]);
+
+  // ✅ Filtro de busca e categoria
+  const filteredNews = news.filter((item) => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "Todas" || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setSearchParams({ search: query });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,7 +43,7 @@ export default function News() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Regional News</h1>
-            <SearchBar onSearch={setSearchQuery} />
+            <SearchBar onSearch={handleSearch} initialQuery={initialSearch} />
           </div>
 
           <div className="mb-8">
@@ -73,14 +65,14 @@ export default function News() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredNews.map((news) => (
-              <NewsCard key={news.id} {...news} />
+            {filteredNews.map((item) => (
+              <NewsCard key={item.id} {...item} />
             ))}
           </div>
 
           {filteredNews.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-600">No news articles found matching your criteria.</p>
+              <p className="text-gray-600">Não temos nenhuma notícia sobre isso.</p>
             </div>
           )}
         </div>
