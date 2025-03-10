@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import Header from "@/components/Header";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
@@ -16,8 +16,8 @@ export default function Contact() {
     e.preventDefault();
     // Here we would normally submit to an API
     toast({
-      title: "Message Sent",
-      description: "Thank you for your message. We'll get back to you soon!",
+      title: "Mensagem enviada com sucesso",
+      description: "Obrigado pela mensagem, responderemos em breve.",
     });
     setFormData({ name: "", email: "", message: "" });
   };
@@ -36,20 +36,13 @@ export default function Contact() {
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="grid md:grid-cols-2">
                 <div className="p-6 md:p-8 bg-primary text-white">
-                  <h1 className="text-2xl font-bold mb-6">Contact Us</h1>
+                  <h1 className="text-2xl font-bold mb-6">Fale Conosco</h1>
                   <div className="space-y-6">
-                    <div className="flex items-start space-x-3">
-                      <MapPin className="w-6 h-6 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">Address</p>
-                        <p className="mt-1">123 Main Street, Unamar Beach, RJ, Brazil</p>
-                      </div>
-                    </div>
                     <div className="flex items-start space-x-3">
                       <Phone className="w-6 h-6 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Phone</p>
-                        <p className="mt-1">+55 (21) 99999-9999</p>
+                        <p className="font-medium">Celular</p>
+                        <p className="mt-1">+55 (22) 99915-8463</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
