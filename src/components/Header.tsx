@@ -63,9 +63,7 @@ export default function Header() {
               </Link>
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className="btn-login px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover">
-                    Login
-                  </button>
+                  <User2Icon className="text-white cursor-pointer"/>
                 </PopoverTrigger>
 
                 <PopoverContent
