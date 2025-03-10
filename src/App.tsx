@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import TestSupabase from "./components/TestSupabase";
 import PlansPage from "./pages/PlansPage";
 import { AuthContextProvider } from "./hooks/useAuth";
+import { About } from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/business/:id" element={<BusinessProfile />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:id" element={<NewsProfile />} />
+              <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/plans" element={<PlansPage />} />
               <Route path="*" element={<NotFound />} />
