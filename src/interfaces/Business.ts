@@ -7,7 +7,7 @@ export interface Business {
       instagram: string;
     }
     category: string;
-    rating: number;
+    rating?: number;
     address: string;
     whatsapp: string;
     telephone: string;
