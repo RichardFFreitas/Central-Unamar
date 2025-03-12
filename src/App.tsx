@@ -12,7 +12,6 @@ import News from "./pages/News";
 import NewsProfile from "./pages/NewsProfile";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-import TestSupabase from "./components/TestSupabase";
 import PlansPage from "./pages/PlansPage";
 import { AuthContextProvider } from "./hooks/useAuth";
 import { About } from "./pages/About";
@@ -29,7 +28,6 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/test-supabase" element={<TestSupabase />} />
               <Route path="/register" element={<BusinessRegistration />} />
               <Route path="/businesses" element={<Businesses />} />
               <Route path="/business/:id" element={<BusinessProfile />} />
