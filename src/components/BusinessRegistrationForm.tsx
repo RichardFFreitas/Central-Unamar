@@ -36,20 +36,6 @@ export default function BusinessRegistrationForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }; 
-  // VERSÃO SEM CONVERSÃO DE ARQUIVO
-  // const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.target.files;
-  //   if (files && files.length > 0) {
-  //     const newPhotos = Array.from(files).map(file => ({
-  //       file,
-  //       preview: URL.createObjectURL(file)
-  //     }));
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       photos: [...prev.photos, ...newPhotos],
-  //     }));
-  //   }
-  // };
   
   const convertToWebP = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
@@ -81,6 +67,17 @@ export default function BusinessRegistrationForm() {
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
+    const planLimits = {basic: 1, professional: 5, enterprise: 10};
+    const maxPhotos = planLimits[formData.selectedPlan]
+    if(formData.photos.length + files.length > maxPhotos) {
+      const photoText = formData.selectedPlan === 'basic' ? 'foto' : 'fotos';
+      toast({
+        title: "Limite de Fotos excedido",
+        description: `Seu plano permite no maximo ${maxPhotos} ${photoText}`,
+        className:'bg-red-600 text-white'
+      });
+      return;
+    }
       const newPhotos = await Promise.all(
         Array.from(files).map(async (file) => {
           const webpFile = await convertToWebP(file);

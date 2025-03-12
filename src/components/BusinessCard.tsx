@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import { Star, MapPin, Globe, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  Star,
+  MapPin,
+  Globe,
+  Phone,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { Business } from '@/interfaces/Business';
+import { Business } from "@/interfaces/Business";
 
 const BusinessCard = ({
   id,
@@ -26,7 +33,8 @@ const BusinessCard = ({
     );
   };
 
-  const whatsapp =  telephone + "?text=Ol%C3%A1%20vim%20pelo%20site%20central%20unamar"
+  const whatsapp =
+    telephone + "?text=Ol%C3%A1%20vim%20pelo%20site%20central%20unamar";
 
   return (
     <div className="relative bg-white rounded-lg overflow-hidden group h-[300px]">
@@ -43,7 +51,7 @@ const BusinessCard = ({
               src={photo}
               alt={`${name} - Foto ${index + 1}`}
               className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
-                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                index === currentImageIndex ? "opacity-100" : "opacity-0"
               }`}
             />
           ))
@@ -69,21 +77,24 @@ const BusinessCard = ({
       </div>
 
       {/* Destaque Badge - Só aparece se plan for enterprise */}
-      {plan === 'enterprise' && (
+      {plan === "enterprise" && (
         <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-medium z-10">
           Destaque
         </div>
       )}
-
       {/* Hover Content */}
       <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-between">
         <div>
           <div className="flex justify-between items-start mb-2">
             <h3 className="text-xl font-semibold text-white">{name}</h3>
-            <div className="flex items-center bg-white/10 backdrop-blur-sm px-2 py-1 mt-4 rounded">
-              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="ml-1 text-sm font-medium text-white">{rating}</span>
-            </div>
+            {plan === "enterprise" && (
+              <div className="flex items-center bg-white/10 backdrop-blur-sm px-2 py-1 mt-4 rounded">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span className="ml-1 text-sm font-medium text-white">
+                  {rating}
+                </span>
+              </div>
+            )}
           </div>
           <p className="text-white/80 text-sm mb-2">{category}</p>
           <div className="flex items-center text-white/80 text-sm">
@@ -103,14 +114,27 @@ const BusinessCard = ({
             <Phone className="w-4 h-4 mr-2" />
             WhatsApp
           </a>
-          <Link
-            to={`/business/${id}`}
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
-          >
-            <Globe className="w-4 h-4 mr-2" />
-            Visitar a Pagina
-          </Link>
+          {plan === "enterprise" && (
+            <Link
+              to={`/business/${id}`}
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
+            >
+              <Globe className="w-4 h-4 mr-2" />
+              Visitar a Pagina
+            </Link>
+          )}
+
+          {plan === "professional" && (
+            <Link
+              to={`/business/${id}`}
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
+            >
+              <Globe className="w-4 h-4 mr-2" />
+              Visitar a Pagina
+            </Link>
+          )}
         </div>
       </div>
     </div>

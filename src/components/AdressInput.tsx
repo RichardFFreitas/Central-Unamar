@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
+import { LoaderCircle } from 'lucide-react'
 
 interface Address {
   logradouro: string
@@ -92,9 +93,9 @@ export default function AddressInput({ onAddressSelect }: AddressInputProps) {
       </div>
 
       {loading && (
-        <div className="text-sm text-gray-500">
-          Buscando endereço...
-        </div>
+        <div className="flex justify-center items-center h-screen animate-spin">
+        <LoaderCircle />
+      </div>
       )}
 
       {logradouro && (
