@@ -53,7 +53,7 @@ export const Sidebar = () => {
 							businesses.map((business) => (
 								<article className="group flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-all cursor-pointer" key={business.id}>
 									<div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-										<img src={business.photos[0]} alt={`logo da empresa ${business.name}`} />
+										<img className="w-12 h-12 object-cover rounded-full" src={business.photos[0]} alt={`logo da empresa ${business.name}`} />
 									</div>
 									<div>
 										<h3 className="font-medium group-hover:underline">{business.name}</h3>
