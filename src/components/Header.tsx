@@ -97,37 +97,37 @@ export default function Header() {
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
               <Link
                 to="/"
-                className="text-White hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Home
               </Link>
               <Link
                 to="/businesses"
-                className="text-White hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Comércios
               </Link>
               <Link
                 to="/plans"
-                className="text-White hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Planos
               </Link>
               <Link
                 to="/news"
-                className="text-white hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Notícias
               </Link>
               <Link
                 to="/about"
-                className="text-White hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Sobre
               </Link>
               <Link
                 to="/contact"
-                className="text-White hover:text-primary transition-colors"
+                className=" hover:text-primary transition-colors"
               >
                 Contato
               </Link>
