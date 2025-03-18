@@ -8,17 +8,29 @@ import { CATEGORIES } from "@/constantes/categories";
 import { LOCATIONS } from "@/constantes/locations";
 import { Business } from "@/interfaces/Business";
 import { LoaderCircle } from "lucide-react";
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Businesses() {
   const { getBusinesses } = useSupabase();
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialSearch = searchParams.get('search') || '';
+  const initialSearch = searchParams.get("search") || "";
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedLocation, setSelectedLocation] = useState("Todos");
+
+  // Estados para paginação
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     loadBusinesses();
@@ -36,28 +48,46 @@ export default function Businesses() {
     setSearchParams({ search: query });
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 400, behavior: "smooth" });
+  };
+
   const filteredBusinesses = businesses.filter((business) => {
-    const matchesSearch = business.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "Todos" || business.category === selectedCategory;
-    const matchesLocation = selectedLocation === "Todos" || business.address.includes(selectedLocation);
+    const matchesSearch = business.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "Todos" || business.category === selectedCategory;
+    const matchesLocation =
+      selectedLocation === "Todos" ||
+      business.address.includes(selectedLocation);
     return matchesSearch && matchesCategory && matchesLocation;
   });
+
+
+  const totalPages = Math.ceil(filteredBusinesses.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+      <div className="min-h-screen bg-gray-50 pt-10 pb-16">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>
+            <div className="flex justify-center items-center h-screen animate-spin">
+              <LoaderCircle />
+            </div>
           ) : (
             <>
               <div className="max-w-4xl mx-auto mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">
                   Descubra Negócios Locais
                 </h1>
-                <SearchBar 
-                  onSearch={handleSearch} 
+                <SearchBar
+                  onSearch={handleSearch}
                   initialQuery={initialSearch}
                 />
               </div>
@@ -92,18 +122,18 @@ export default function Businesses() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredBusinesses.map((business) => (
+                {paginatedBusinesses.map((business) => (
                   <BusinessCard
-                  key={business.id}
-                  id={business.id.toString()}
-                  name={business.name}
-                  category={business.category}
-                  rating={business.rating || 0}
-                  photos={business.photos}
-                  address={business.address}
-                  whatsapp={business.whatsapp}
-                  telephone={business.telephone}
-                  plan={business.plan}
+                    key={business.id}
+                    id={business.id.toString()}
+                    name={business.name}
+                    category={business.category}
+                    rating={business.rating || 0}
+                    photos={business.photos}
+                    address={business.address}
+                    whatsapp={business.whatsapp}
+                    telephone={business.telephone}
+                    plan={business.plan}
                   />
                 ))}
               </div>
@@ -114,6 +144,56 @@ export default function Businesses() {
                     Nenhum negócio encontrado com os critérios selecionados.
                   </p>
                 </div>
+              )}
+
+              {/* Paginação funcional */}
+              {totalPages > 1 && (
+                <Pagination className="mt-5">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        className="cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(Math.max(1, currentPage - 1))
+                        }
+                      />
+                    </PaginationItem>
+
+                    {[...Array(totalPages)].map((_, index) => (
+                      <PaginationItem key={index}>
+                        <PaginationLink
+                         className="cursor-pointer"
+                          onClick={() => handlePageChange(index + 1)}
+                          isActive={currentPage === index + 1}
+                        >
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    {totalPages > 5 && (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        className="cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(
+                            Math.min(
+                              currentPage + 1,
+                              Math.ceil(
+                                filteredBusinesses.length / itemsPerPage
+                              )
+                            )
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               )}
             </>
           )}
