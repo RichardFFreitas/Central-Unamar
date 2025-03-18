@@ -19,9 +19,8 @@ const LoginPopup = () => {
 
     let { data, error } = await supabase.auth.signInWithPassword({
       email: email,
-      password: password,
-    });
-
+      password: password
+    })
     if (error) {
       toast({
         title: "Erro",
