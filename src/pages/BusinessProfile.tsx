@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
-import { Star, MapPin, Phone, Globe, Facebook, Instagram, Twitter, LoaderCircle } from "lucide-react";
+import { Star, MapPin, Phone,  LoaderCircle } from "lucide-react";
 import { useSupabase } from "@/hooks/useSupabase";
 import { Business } from "@/interfaces/Business";
 
