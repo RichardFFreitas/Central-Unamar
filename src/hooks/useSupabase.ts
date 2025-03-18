@@ -111,7 +111,7 @@ export function useSupabase() {
     if (error) {
       toast({
         title: "Erro",
-        description: "Erro ao criar negócio",
+        description: `Erro ao criar negócio ${error}`,
         variant: "destructive",
       });
       return null;
