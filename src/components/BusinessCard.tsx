@@ -42,7 +42,7 @@ const BusinessCard = ({
       <div className="relative h-full w-full">
         {photos.length === 0 ? (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">Sem fotos</span>
+            <img src="/placeholder.svg" alt="Comércio sem foto" />
           </div>
         ) : (
           photos.map((photo, index) => (
