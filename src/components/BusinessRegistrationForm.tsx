@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Upload, X } from "lucide-react";
 import { CATEGORIES } from "@/constantes/categories";
 import AddressInput from "./AdressInput";
+import { useAuth } from "@/hooks/useAuth";
 
 interface BusinessFormData {
   name: string;
@@ -17,6 +18,7 @@ interface BusinessFormData {
 }
 
 export default function BusinessRegistrationForm() {
+  const { user } = useAuth()
   const { toast } = useToast();
   const { createBusiness } = useSupabase();
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ export default function BusinessRegistrationForm() {
     selectedPlan: "basic",
     photos: [],
   });
+
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -78,6 +81,7 @@ export default function BusinessRegistrationForm() {
       });
       return;
     }
+    
       const newPhotos = await Promise.all(
         Array.from(files).map(async (file) => {
           const webpFile = await convertToWebP(file);
@@ -108,6 +112,7 @@ export default function BusinessRegistrationForm() {
     try {
       const businessData = {
         name: formData.name,
+        user_id: user.id,
         address: formData.address,
         telephone: formData.telephone,
         category: formData.category,
@@ -129,7 +134,7 @@ export default function BusinessRegistrationForm() {
       toast({
         title: "Erro",
         description: "Erro ao cadastrar negócio. Tente novamente.",
-        variant: "destructive",
+        className: "bg-red-600"
       });
     }
   };
@@ -169,6 +174,7 @@ export default function BusinessRegistrationForm() {
       formData.photos.forEach(photo => URL.revokeObjectURL(photo.preview));
     };
   }, [formData.photos]);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
@@ -260,7 +266,7 @@ export default function BusinessRegistrationForm() {
               accept="image/*"
               onChange={handlePhotoUpload}
               className="hidden"
-              required
+              
             />
             <Plus className="w-6 h-6 text-gray-400" />
           </label>
