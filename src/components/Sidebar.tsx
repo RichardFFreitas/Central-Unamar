@@ -23,7 +23,7 @@ export const Sidebar = () => {
 
 
 	return (
-		<div className="invisible xl:visible ">
+		<div className="invisible xl:visible">
 			<div className="w-[300px] bg-white rounded-lg shadow-lg p-6 space-y-6">
 				<h2 className="font-semibold text-lg mb-4">Ultimas notícias de Unamar</h2>
 				<section>
