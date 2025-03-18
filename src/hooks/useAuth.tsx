@@ -5,7 +5,6 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { useToast } from "./use-toast";
 import { supabase } from "@/lib/supabase";
 
 // Definindo o tipo para o usuário
@@ -28,7 +27,6 @@ interface AuthContextProviderProps {
   children: ReactNode;
 }
 
-// Provider que envolve o aplicativo
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
@@ -41,7 +39,16 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         setUser(user);
       }
     };
-    getUser();
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        getUser()
+      }
+    };
+    checkSession()
   }, []);
 
   return (
@@ -53,14 +60,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
 // Hook para consumir o contexto
 export function useAuth() {
-  const { toast } = useToast();
   const context = useContext(AuthContext);
   if (!context) {
-    toast({
-      title: "Erro",
-      description: `Erro ao adquirir contexto`, // Acesso correto à mensagem de erro
-      variant: "destructive",
-    });
+    throw new Error("useAuth deve ser usado dentro de um AuthContextProvider");
   }
   return context;
 }
