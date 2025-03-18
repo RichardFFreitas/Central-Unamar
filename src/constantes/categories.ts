@@ -16,6 +16,7 @@ export const CATEGORIES = [
   "Oficina",
   "PetShop",
   "Produtos naturais",
+  "Piscinas",
   "Restaurante",
   "Roupas",
   "Pousada",
