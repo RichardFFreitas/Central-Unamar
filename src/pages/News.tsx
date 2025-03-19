@@ -20,14 +20,15 @@ export default function News() {
 
   useEffect(() => {
     const fetchNews = async () => {
-      const formattedNewsData = news.map((news) => ({
+      const data = await getNews();  
+      const formattedNewsData = data.map((news) => ({
         ...news,
         date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
       }));
-      setNews(formattedNewsData || []);
+      setNews(formattedNewsData); 
     };
     fetchNews();
-  }, [getNews]);
+  }, []); 
 
   const filteredNews = news.filter((item) => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
