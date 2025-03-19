@@ -1,11 +1,24 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import { Link } from "react-router-dom";
 import { Footer } from "@/components/Footer";
+
 export const About = () => {
   return (
     <div>
-        <Header />
+      <Helmet>
+        <title>Sobre Nós - Central Unamar</title>
+        <meta name="description" content="Saiba mais sobre a Central Unamar, a plataforma que conecta moradores e visitantes aos melhores comércios e serviços da região." />
+        <meta name="keywords" content="Central Unamar, Unamar, negócios locais, comércio, serviços, sobre nós" />
+        <meta property="og:title" content="Sobre Nós - Central Unamar" />
+        <meta property="og:description" content="Conheça a Central Unamar, a plataforma que facilita o acesso a comércios e serviços em Unamar." />
+        <meta property="og:image" content="/ORLA-DE-Unamar.jpg" />
+        <meta property="og:url" content="https://www.central-unamar.com.br/about" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
+      <Header />
       <div className="min-h-[720px] bg-white font-sans">
         <main className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-16">
           <div className="relative overflow-hidden rounded-lg shadow-xl transform transition-transform duration-500 hover:scale-105">
@@ -38,7 +51,7 @@ export const About = () => {
               </p>
               <p>
                 Além disso, oferecemos um espaço para notícias e atualizações
-                sobre Unamar, garantindo que você esteja sempre bem informado
+                sobre Unamar, garantindo que você esteja sempre bem informado.
               </p>
             </div>
 

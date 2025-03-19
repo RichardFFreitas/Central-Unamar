@@ -131,12 +131,18 @@ export default function Header() {
               >
                 Contato
               </Link>
-              <Link
-                to="/register"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition-colors text-center"
-              >
-                Registre seu comércio
-              </Link>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <span>Fazer login</span>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="center"
+                  sideOffset={4}
+                  className="w-80 p-4 bg-white rounded-md shadow-lg"
+                >
+                  <LoginPopup />
+                </PopoverContent>
+              </Popover>
             </nav>
           </div>
         )}

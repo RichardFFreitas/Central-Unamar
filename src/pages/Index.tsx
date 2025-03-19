@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   const { getBusinesses, getNews } = useSupabase();
@@ -33,20 +34,23 @@ const Index = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      const newsData = await getNews();
-      const formattedNewsData = newsData.map((news) => ({
-        ...news,
-        date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
-      }));
-      setAllnews(formattedNewsData || []);
+      const [newsData, businessesData] = await Promise.all([
+        getNews(),
+        getBusinesses(),
+      ]);
 
-      const businessesData = await getBusinesses();
+      setAllnews(
+        newsData.map((news) => ({
+          ...news,
+          date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
+        }))
+      );
+
       setAllBusinesses(businessesData || []);
+      setFeaturedBusinesses(
+        businessesData?.filter((b) => b.plan === "enterprise") || []
+      );
 
-      const enterpriseBusinesses =
-        businessesData?.filter((business) => business.plan === "enterprise") ||
-        [];
-      setFeaturedBusinesses(enterpriseBusinesses);
       setLoading(false);
     };
 
@@ -55,6 +59,24 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Central Unamar | Encontre os Melhores Comercios da Região</title>
+        <meta
+          name="description"
+          content="Encontre os melhores comércios de Unamar, com informações sobre localização, telefone, categorias e muito mais."
+        />
+        <meta
+          property="og:title"
+          content="Central Unamar | Encontre os Melhores Comercios da Região"
+        />
+        <meta
+          property="og:description"
+          content="Encontre os melhores comércios de Unamar, com informações sobre localização, telefone, categorias e muito mais."
+        />
+        <meta property="og:image" content="/Unamar.jpg" />
+        <meta property="og:url" content={window.location.href} />
+      </Helmet>
+
       <Header />
       {loading ? (
         <div className="flex justify-center items-center h-screen animate-spin">
@@ -77,7 +99,11 @@ const Index = () => {
               </h1>
               <div className="max-w-2xl mx-auto">
                 <SearchBar />
-                <a href="https://wa.me/5522997586193?text=Ol%C3%A1%2C%20vim%20pela%20central%20unamar%2C%20e%20gostaria%20de%20saber%20como%20posso%20anunciar%20tamb%C3%A9m">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://wa.me/5522997586193?text=Ol%C3%A1%2C%20vim%20pela%20central%20unamar%2C%20e%20gostaria%20de%20saber%20como%20posso%20anunciar%20tamb%C3%A9m"
+                >
                   <button className="mt-8 bg-red-600 text-white px-8 py-3 rounded font-semibold hover:bg-red-700 transition-colors">
                     Fale com um de nossos atendentes.
                   </button>

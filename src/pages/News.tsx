@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import { useSupabase } from "@/hooks/useSupabase";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Helmet } from "react-helmet-async";  // Importa o Helmet
 
 const CATEGORIES = ["Todas", "Economia e negócios", "Eventos e cultura", "Esportes", "Segurança pública", "Clima e trânsito", "Saúde"];
 
@@ -20,15 +21,14 @@ export default function News() {
   useEffect(() => {
     const fetchNews = async () => {
       const formattedNewsData = news.map((news) => ({
-              ...news,
-              date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
-            }));
-            setNews(formattedNewsData || []);
+        ...news,
+        date: format(new Date(news.date), "dd-MM-yyyy", { locale: ptBR }),
+      }));
+      setNews(formattedNewsData || []);
     };
     fetchNews();
   }, [getNews]);
 
-  
   const filteredNews = news.filter((item) => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "Todas" || item.category === selectedCategory;
@@ -42,6 +42,10 @@ export default function News() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Notícias Regionais - Central Unamar</title>
+        <meta name="description" content="Encontre as últimas notícias de Unamar e região. Fique por dentro de eventos, economia, segurança e muito mais." />
+      </Helmet>
       <Header />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

@@ -4,6 +4,7 @@ import { useSupabase } from '@/hooks/useSupabase';
 import { News } from '@/interfaces/News';
 import { LoaderCircle } from 'lucide-react';
 import Header from '@/components/Header';
+import { Helmet } from 'react-helmet-async'; // Importando o Helmet
 
 export default function NewsProfile() {
   const { getNews } = useSupabase();
@@ -24,19 +25,21 @@ export default function NewsProfile() {
     fetchNews();
   }, [id, getNews]);
 
-
   if (!news) {
     return <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>;
   }
 
-
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{news.title} - Central Unamar</title>
+        <meta name="description" content={news.excerpt || "Leia mais sobre essa notícia na nossa plataforma."} />
+      </Helmet>
       <Header />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">{news.title}</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">{news.title}</h1>
             {/* Photo Gallery */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
               <div className="aspect-video relative">
@@ -46,10 +49,8 @@ export default function NewsProfile() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex overflow-x-auto">
-              </div>
             </div>
-            {/* news Info */}
+            {/* News Info */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
               <div className="flex items-start justify-between mb-4">
                 <div>

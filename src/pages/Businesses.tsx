@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import SearchBar from "@/components/BusinessSearchBar";
 import BusinessCard from "@/components/BusinessCard";
@@ -65,7 +66,6 @@ export default function Businesses() {
     return matchesSearch && matchesCategory && matchesLocation;
   });
 
-
   const totalPages = Math.ceil(filteredBusinesses.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -73,6 +73,19 @@ export default function Businesses() {
 
   return (
     <>
+      {/* SEO - React Helmet Async */}
+      <Helmet>
+        <title>Negócios Locais em Unamar | Central Unamar</title>
+        <meta
+          name="description"
+          content="Explore os melhores negócios locais em Unamar. Encontre empresas, serviços e produtos perto de você."
+        />
+        <meta property="og:title" content="Negócios Locais em Unamar | Central Unamar" />
+        <meta property="og:description" content="Encontre os melhores comércios e serviços da região de Unamar." />
+        <meta property="og:url" content="https://www.central-unamar.com.br/businesses" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+
       <Header />
       <div className="min-h-screen bg-gray-50 pt-10 pb-16">
         <div className="container mx-auto px-4">
@@ -162,7 +175,7 @@ export default function Businesses() {
                     {[...Array(totalPages)].map((_, index) => (
                       <PaginationItem key={index}>
                         <PaginationLink
-                         className="cursor-pointer"
+                          className="cursor-pointer"
                           onClick={() => handlePageChange(index + 1)}
                           isActive={currentPage === index + 1}
                         >
