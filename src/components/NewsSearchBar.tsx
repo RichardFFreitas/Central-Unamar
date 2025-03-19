@@ -4,36 +4,32 @@ import { Search } from 'lucide-react';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
+  initialQuery?: string; // Adicionamos de volta
 }
 
-export default function NewsSearchBar({ onSearch }: SearchBarProps) {
+export default function NewsSearchBar({ onSearch, initialQuery = '' }: SearchBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
 
-  // Sincroniza com a URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    setSearchQuery(params.get('search') || '');
-  }, [location.search]);
+    const urlQuery = params.get('search') || initialQuery;
+    setSearchQuery(urlQuery);
+  }, [location.search, initialQuery]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const query = searchQuery.trim();
     const targetPath = '/news';
 
-    // Monta a nova URL
     const searchParams = new URLSearchParams();
     if (query) searchParams.set('search', query);
 
-    // Navegação inteligente
     if (location.pathname !== targetPath) {
       navigate(`${targetPath}?${searchParams.toString()}`);
     } else {
-      navigate(`?${searchParams.toString()}`, { 
-        replace: true,
-        state: { fromSearch: true }
-      });
+      navigate(`?${searchParams.toString()}`, { replace: true });
       onSearch?.(query);
     }
   };
