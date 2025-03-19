@@ -1,69 +1,85 @@
-# Welcome to your Lovable project
+# Projeto Central Unamar
 
-## Project info
+## Visão Geral
 
-**URL**: https://lovable.dev/projects/b0a302d2-6110-4249-aff8-c0a20658f8af
+O **Central Unamar** é uma plataforma de comércios e notícias que tem como objetivo promover os negócios locais da região de Unamar. O projeto foi criado para permitir que os comerciantes da região possam divulgar seus produtos e serviços, oferecendo visibilidade por meio de planos de assinatura. Além disso, a plataforma contém um portal de notícias locais, permitindo que jornalistas da região publiquem conteúdo relevante para a comunidade.
 
-## How can I edit this code?
+![Logo do Central Unamar](public/favicon.ico) <!-- Coloque o link da imagem do logo aqui -->
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## Funcionalidades
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/b0a302d2-6110-4249-aff8-c0a20658f8af) and start prompting.
+### 1. **Comércios em Destaque**
+Comerciantes podem escolher um plano de assinatura para destacar seus negócios na plataforma, aumentando a visibilidade e a chance de atrair mais clientes.
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Plano Básico**: Destaque simples no site.
+- **Plano Intermediário**: Maior visibilidade e destaque em seções específicas.
+- **Plano Premium**: Aparecimento no carrossel principal e maior destaque no site.
 
-**Use your preferred IDE**
+#### Exemplo de Página de Comércios:
+![Exemplo de Comércios](public/Exemplo-de-comercio.png) <!-- Coloque o link do print da página de comércios -->
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 2. **Notícias Locais**
+O portal de notícias oferece informações relevantes sobre a região, incluindo tópicos como segurança pública, economia, clima, e eventos culturais.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+#### Exemplo de Página de Notícias:
+![Exemplo de Notícias](public/exemplo-de-noticia.png) <!-- Coloque o link do print da página de notícias -->
 
-Follow these steps:
+### 3. **Busca Avançada de Comércios**
+A plataforma possui uma barra de busca avançada para que os usuários encontrem os comércios de acordo com categorias, localização, ou palavras-chave.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+#### Exemplo de Barra de Busca:
+![Exemplo de Barra de Busca](public/exemplo-de-busca.png) <!-- Coloque o link do print da barra de busca -->
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+<!-- ### 4. **Sistema de Avaliação**
+Usuários podem avaliar os comércios com uma nota de 0 a 5, oferecendo feedback para os negócios e ajudando novos clientes a tomar decisões.
 
-# Step 3: Install the necessary dependencies.
-npm i
+#### Exemplo de Avaliação:
+![Exemplo de Avaliação](link-para-print-de-avaliacao) Coloque o link do print da avaliação -->
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## Tecnologias Utilizadas
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-**Use GitHub Codespaces**
+- **Frontend**:
+  - React
+  - Tailwind CSS
+  - ShadCN UI
+  - React Router
+  - React Helmet (SEO)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Backend**:
+  - Supabase (Autenticação, Banco de Dados)
 
-## What technologies are used for this project?
+<!-- - **Outros**:
+  - Firebase para o envio de notificações
+  - Figma para o design da interface -->
 
-This project is built with .
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Como Usar
 
-## How can I deploy this project?
+### 1. **Cadastro de Comerciantes**
+- O comerciante se cadastra na plataforma e escolhe o plano de assinatura.
+- Após o cadastro, o comerciante pode adicionar suas informações, fotos, e detalhes de contato.
 
-Simply open [Lovable](https://lovable.dev/projects/b0a302d2-6110-4249-aff8-c0a20658f8af) and click on Share -> Publish.
+#### Exemplo de Cadastro:
+![Exemplo de Cadastro](public/formulario-de-registro.png) <!-- Coloque o link do print do cadastro -->
 
-## I want to use a custom domain - is that possible?
+### 2. **Publicação de Notícias**
+- Jornalistas ou administradores podem criar, editar e excluir notícias na plataforma, incluindo título, imagem, categoria e conteúdo.
+<!-- 
+#### Exemplo de Publicação de Notícias:
+![Exemplo de Publicação de Notícias](link-para-print-da-publicacao) Coloque o link do print da publicação de notícias -->
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+---
+
+## Contato
+
+Se você tiver dúvidas ou sugestões, entre em contato conosco!
+
+- **Email**: richardfelipelives@gmail.com
+
