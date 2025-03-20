@@ -20,6 +20,7 @@ const BusinessCard = ({
   address,
   telephone,
   plan,
+  slug,
 }: Business) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -116,7 +117,7 @@ const BusinessCard = ({
           </a>
           {plan === "enterprise" && (
             <Link
-              to={`/business/${id}`}
+              to={`/business/${slug}`}
               rel="noopener noreferrer"
               className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
             >
@@ -127,7 +128,7 @@ const BusinessCard = ({
 
           {plan === "professional" && (
             <Link
-              to={`/business/${id}`}
+              to={`/business/${slug}`}
               rel="noopener noreferrer"
               className="flex items-center justify-center w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
             >

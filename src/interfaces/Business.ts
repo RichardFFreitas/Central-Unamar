@@ -13,4 +13,5 @@ export interface Business {
     telephone: string;
     photos: string[];
     plan: string;
+    slug: string,
   }

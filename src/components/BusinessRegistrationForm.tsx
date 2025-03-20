@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { Plus, Upload, X } from "lucide-react";
 import { CATEGORIES } from "@/constantes/categories";
 import AddressInput from "./AdressInput";

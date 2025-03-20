@@ -1,69 +1,85 @@
-import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/contexts/AuthContext'
-import { useToast } from '@/hooks/use-toast'
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export function useSupabase() {
-  const { toast } = useToast()
-  const { user } = useAuth()
+  const { toast } = useToast();
+  const { user } = useAuth();
 
   const getBusiness = async (id: string) => {
     const { data, error } = await supabase
-      .from('businesses')
-      .select('*')
-      .eq('id', id)
-      .single()
+      .from("businesses")
+      .select("*")
+      .eq("id", id)
+      .single();
 
     if (error) {
       toast({
         title: "Erro",
         description: "Erro ao buscar informações do negócio",
         variant: "destructive",
-      })
-      return null
+      });
+      return null;
     }
 
-    return data
-  }
+    return data;
+  };
 
   const getBusinesses = async () => {
     const { data, error } = await supabase
-      .from('businesses')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("businesses")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
       toast({
         title: "Erro",
         description: "Erro ao buscar negócios",
         variant: "destructive",
-      })
-      return []
+      });
+      return [];
     }
 
-    return data.map(business => ({
+    return data.map((business) => ({
       ...business,
-      photos: business.photos || [], 
+      photos: business.photos || [],
     }));
-  }
-  
+  };
+
+  const getBusinessBySlug = async (slug: string) => {
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("*")
+      .eq("slug", slug)
+      .single();
+
+    if (error) {
+      toast({
+        title: `Erro ao buscar comércio: ${error}`
+      })
+      return null
+    }
+    return data
+  };
+
   const uploadBusinessPhoto = async (file: File, businessId: number) => {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${businessId}-${Date.now()}.${fileExt}`;
       const filePath = `business_photos/${fileName}`;
-  
+
       // Upload do arquivo
       const { error: uploadError } = await supabase.storage
-        .from('Imgs')
+        .from("Imgs")
         .upload(filePath, file);
-  
+
       if (uploadError) throw uploadError;
-  
+
       // Obter URL pública
-      const { data: { publicUrl } } = supabase.storage
-        .from('Imgs')
-        .getPublicUrl(filePath);
-  
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("Imgs").getPublicUrl(filePath);
+
       return publicUrl;
     } catch (error) {
       toast({
@@ -76,38 +92,39 @@ export function useSupabase() {
   };
 
   const getNews = async (id?: string) => {
-    const {data, error} = await supabase
-    .from('news')
-    .select('*')
-    .order('created_at', { ascending: false })
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
       toast({
         title: "Erro",
         description: "Erro ao buscar noticias",
         variant: "destructive",
-      })
-      return []
+      });
+      return [];
     }
 
-    return data
-  }
-  
+    return data;
+  };
 
   const createBusiness = async (businessData: any) => {
     const { photos, ...rest } = businessData;
-  
+
     // Criar o negócio primeiro
     const { data: business, error } = await supabase
-      .from('businesses')
-      .insert([{ 
-        ...rest, 
-        user_id: user?.id,
-        created_at: new Date().toISOString()
-      }])
+      .from("businesses")
+      .insert([
+        {
+          ...rest,
+          user_id: user?.id,
+          created_at: new Date().toISOString(),
+        },
+      ])
       .select()
       .single();
-  
+
     if (error) {
       toast({
         title: "Erro",
@@ -116,7 +133,7 @@ export function useSupabase() {
       });
       return null;
     }
-  
+
     // Upload das fotos
     if (photos && photos.length > 0) {
       const uploadedUrls = [];
@@ -126,11 +143,11 @@ export function useSupabase() {
       }
       // Atualize o negócio com as URLs das fotos
       await supabase
-        .from('businesses')
+        .from("businesses")
         .update({ photos: uploadedUrls })
-        .eq('id', business.id);
-    }  
-  
+        .eq("id", business.id);
+    }
+
     return business;
   };
 
@@ -139,5 +156,6 @@ export function useSupabase() {
     getBusinesses,
     createBusiness,
     getNews,
-  }
+    getBusinessBySlug,
+  };
 }

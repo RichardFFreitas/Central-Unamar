@@ -8,14 +8,15 @@ import { Helmet } from "react-helmet-async";
 
 export default function BusinessProfile() {
   const { getBusiness } = useSupabase();
-  const { id } = useParams();
+  const { getBusinessBySlug } = useSupabase();
+  const { slug } = useParams();
   const [business, setBusiness] = useState<Business | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<string>("");
 
   useEffect(() => {
     const fetchBusiness = async () => {
-      if (id) {
-        const data = await getBusiness(id);
+      if (slug) {
+        const data = await getBusinessBySlug(slug);
         if (data) {
           setBusiness(data);
           setSelectedPhoto((prev) => prev || data.photos[0] || "");
@@ -23,7 +24,7 @@ export default function BusinessProfile() {
       }
     };
     fetchBusiness();
-  }, [id, getBusiness]);
+  }, [slug, getBusiness]);
 
   if (!business) {
     return (
@@ -131,7 +132,12 @@ export default function BusinessProfile() {
                   </div>
                   <a href={`https://wa.me/${whatsapp}`} className="">
                     <button className="bg-green-400 px-2 py-2 rounded-full mt-4 flex justify-center items-center">
-                    <img src="/whatsapp.png" alt="Whatsapp logo" className="w-8 mr-1"/> Chamar no whatsapp
+                      <img
+                        src="/whatsapp.png"
+                        alt="Whatsapp logo"
+                        className="w-8 mr-1"
+                      />{" "}
+                      Chamar no whatsapp
                     </button>
                   </a>
                 </div>

@@ -141,6 +141,7 @@ const Index = () => {
                   whatsapp={business.whatsapp}
                   telephone={business.telephone}
                   plan={business.plan}
+                  slug={business.slug}
                 />
               ))}
             </div>
