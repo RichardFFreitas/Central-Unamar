@@ -18,7 +18,7 @@ export default function BusinessProfile() {
         const data = await getBusiness(id);
         if (data) {
           setBusiness(data);
-          setSelectedPhoto(data.photos[0] || "");
+          setSelectedPhoto((prev) => prev || data.photos[0] || "");
         }
       }
     };
@@ -35,7 +35,7 @@ export default function BusinessProfile() {
 
   const whatsapp =
     business.telephone +
-    "?text=Ol%C3%A1%20vim%20pelo%20site%20central%20unamar";
+    "?text=Ol%C3%A1%2C%20Vim%20pelo%20Central%20Unamar%20e%20gostaria%20de%20saber%20mais%20sobre%20seus%20servi%C3%A7os%21";
 
   return (
     <>
@@ -77,7 +77,7 @@ export default function BusinessProfile() {
                   <img
                     src={selectedPhoto}
                     alt={business.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="p-4 flex gap-4 overflow-x-auto">
@@ -130,8 +130,8 @@ export default function BusinessProfile() {
                     <span>{business.telephone}</span>
                   </div>
                   <a href={`https://wa.me/${whatsapp}`} className="">
-                    <button className="bg-green-400 px-2 py-2 rounded-full">
-                      Chamar no whatsapp
+                    <button className="bg-green-400 px-2 py-2 rounded-full mt-4 flex justify-center items-center">
+                    <img src="/whatsapp.png" alt="Whatsapp logo" className="w-8 mr-1"/> Chamar no whatsapp
                     </button>
                   </a>
                 </div>

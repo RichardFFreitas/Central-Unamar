@@ -50,7 +50,7 @@ const BusinessCard = ({
               key={index}
               src={photo}
               alt={`${name} - Foto ${index + 1}`}
-              className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-300 ${
+              className={`w-full h-full object-contain absolute inset-0 transition-opacity duration-300 ${
                 index === currentImageIndex ? "opacity-100" : "opacity-0"
               }`}
             />
