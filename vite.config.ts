@@ -32,4 +32,11 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        dir: "dist", // Garante que o build cria o diretório
+      },
+    },
+  },
 }));
