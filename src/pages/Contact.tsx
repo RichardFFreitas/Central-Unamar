@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import Header from "@/components/Header";
 import { Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -14,12 +14,32 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we would normally submit to an API
-    toast({
-      title: "Mensagem enviada com sucesso",
-      description: "Obrigado pela mensagem, responderemos em breve.",
-    });
-    setFormData({ name: "", email: "", message: "" });
+
+    emailjs
+      .send(
+        "service_f4rpzze",
+        "template_xeb2s3q",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "x7yuez4-MYeseRi7d"
+      )
+      .then(() => {
+        toast({
+          title: "Mensagem enviada com sucesso",
+          description: "Obrigado pela mensagem, responderemos em breve.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      })
+      .catch(() => {
+        toast({
+          title: "Erro ao enviar mensagem",
+          description: "Tente novamente mais tarde.",
+          className: "bg-red-600",
+        });
+      });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -59,7 +79,7 @@ export default function Contact() {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                        Name
+                        Nome
                       </label>
                       <input
                         type="text"
@@ -87,7 +107,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                        Message
+                        Mensagem
                       </label>
                       <textarea
                         id="message"
@@ -103,7 +123,7 @@ export default function Contact() {
                       type="submit"
                       className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-hover transition-colors"
                     >
-                      Send Message
+                      Enviar Mensagem
                     </button>
                   </form>
                 </div>
