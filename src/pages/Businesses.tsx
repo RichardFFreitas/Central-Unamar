@@ -147,6 +147,7 @@ export default function Businesses() {
                     whatsapp={business.whatsapp}
                     telephone={business.telephone}
                     plan={business.plan}
+                    slug={business.slug}
                   />
                 ))}
               </div>

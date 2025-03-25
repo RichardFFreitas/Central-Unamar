@@ -5,6 +5,6 @@ export interface News {
     excerpt: string,
     content?: string,
     category: string,
-    image: string,
+    images: string,
     date?: string
 }

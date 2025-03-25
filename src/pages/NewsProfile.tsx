@@ -4,7 +4,7 @@ import { useSupabase } from '@/hooks/useSupabase';
 import { News } from '@/interfaces/News';
 import { LoaderCircle } from 'lucide-react';
 import Header from '@/components/Header';
-import { Helmet } from 'react-helmet-async'; // Importando o Helmet
+import { Helmet } from 'react-helmet-async';
 
 export default function NewsProfile() {
   const { getNews } = useSupabase();
@@ -18,15 +18,17 @@ export default function NewsProfile() {
         const data = await getNews(id);
         if (data && data.length > 0) {
           setNews(data[0]);
-          setSelectedPhoto(data[0].image);
+          setSelectedPhoto(data[0].images);
         }
       }
     };
     fetchNews();
-  }, [id, getNews]);
+  }, [id]);
 
   if (!news) {
-    return <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>;
+    return(
+      <div className="flex justify-center items-center h-screen animate-spin"><LoaderCircle /></div>
+    ) ;
   }
 
   return (
@@ -58,8 +60,10 @@ export default function NewsProfile() {
                   <p className='text-pretty font-light mt-1'>{news.excerpt}</p>
                 </div>
               </div>
-
-              <p className="text-gray-800 mb-6 font-medium">{news.content}</p>
+                <div
+                className='prose'
+                dangerouslySetInnerHTML={{__html: `${news.content}`}}
+                />
             </div>
           </div>
         </div>

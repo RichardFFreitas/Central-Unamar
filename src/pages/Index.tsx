@@ -158,11 +158,11 @@ const Index = () => {
               {allNews.map((news) => (
                 <NewsCard
                   key={news.id}
-                  id={news.id.toString()}
+                  id={news.id}
                   title={news.title}
                   date={news.date}
                   category={news.category}
-                  image={news.image}
+                  images={news.images}
                   excerpt={news.excerpt}
                 />
               ))}

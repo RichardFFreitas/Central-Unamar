@@ -3,22 +3,15 @@ import { Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { News } from "@/interfaces/News";
 
-interface NewsCardProps {
-  id: string;
-  title: string;
-  excerpt: string;
-  date?: string;
-  image: string;
-  category: string;
-}
+export default function NewsCard({id, title, excerpt, category, images, date}: News) {
 
-export default function NewsCard({ id, title, excerpt, date, image, category }: NewsCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
       <div className="aspect-video relative overflow-hidden">
         <img
-          src={image}
+          src={images}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
@@ -39,7 +32,7 @@ export default function NewsCard({ id, title, excerpt, date, image, category }: 
           to={`/news/${id}`}
           className="text-primary font-medium hover:underline inline-flex items-center"
         >
-          Read More
+          Ler a matéria
           <svg
             className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
             fill="none"

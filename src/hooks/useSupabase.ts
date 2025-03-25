@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { title } from "process";
 
 export function useSupabase() {
   const { toast } = useToast();
@@ -55,11 +56,11 @@ export function useSupabase() {
 
     if (error) {
       toast({
-        title: `Erro ao buscar comércio: ${error}`
-      })
-      return null
+        title: `Erro ao buscar comércio: ${error}`,
+      });
+      return null;
     }
-    return data
+    return data;
   };
 
   const uploadBusinessPhoto = async (file: File, businessId: number) => {
@@ -105,7 +106,6 @@ export function useSupabase() {
       });
       return [];
     }
-
     return data;
   };
 
@@ -151,11 +151,80 @@ export function useSupabase() {
     return business;
   };
 
+  const createNews = async (newsData: any) => {
+    const { photo, ...rest } = newsData;
+  
+    // Criar a notícia primeiro
+    const { data: news, error } = await supabase
+      .from("news")
+      .insert([
+        {
+          ...rest,
+          user_id: user?.id,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select()
+      .single();
+  
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao criar notícia: ${error.message}`,
+        variant: "destructive",
+      });
+      return null;
+    }
+  
+    // Upload da foto única
+    if (photo) {
+      const url = await uploadImageNews(photo.file, news.id);
+      if (url) {
+        await supabase
+          .from("news")
+          .update({ photo: url }) // Alterado para um único campo de imagem
+          .eq("id", news.id);
+      }
+    }
+  
+    return news;
+  };
+  
+  const uploadImageNews = async (file: File, id?: any) => {
+    if (!file) return null;
+    const fileName = `${Date.now()}-${file.name}`;
+    const { data, error } = await supabase.storage
+      .from("news")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+  
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao fazer upload da imagem ${error.message}`,
+      });
+      return null;
+    }
+    toast({
+      title: "Imagem enviada com sucesso",
+      description: `${data}`
+    });
+  
+    const { data: publicUrlData } = supabase.storage
+      .from("news")
+      .getPublicUrl(fileName);
+    return publicUrlData?.publicUrl;
+  };
+
   return {
     getBusiness,
     getBusinesses,
     createBusiness,
     getNews,
     getBusinessBySlug,
+    uploadImageNews,
+    createNews
   };
 }
