@@ -3,14 +3,22 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginPopup from "./LoginPopUp";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useSupabase } from "@/hooks/useSupabase";
+import { Business } from "@/interfaces/Business";
+import Ticker from "./Ticker";
+
+
 
 export default function Header() {
+  const { getBusiness } = useSupabase();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 
   const toggleLoginPopup = () => {
     setIsLoginPopupOpen((prev) => !prev);
   };
+
+  
 
   return (
     <>
@@ -147,20 +155,7 @@ export default function Header() {
           </div>
         )}
       </header>
-      <div className="ticker mt-16">
-        <div className="ticker-content">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex space-x-8">
-              <span className="text-sm">Novo Comércio: Café Marina ⭐ 4.8</span>
-              <span className="text-sm">Notícia: Tech Hub Opening 🎉</span>
-              <span className="text-sm">Comércio com maior avaliação: Wellness Spa ⭐ 4.9</span>
-              <span className="text-sm">
-                Extra: 20% off Premium Plans 🔥
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Ticker />
     </>
   );
 }
