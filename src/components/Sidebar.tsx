@@ -33,7 +33,7 @@ export const Sidebar = () => {
 							allNews.map((news) => (
 								<article className="group" key={news.id}>
 									<h3 className="font-medium transition-all">{news.title}</h3>
-									<img src={news.image} className="rounded-md" alt={news.title} />
+									<img src={news.images} className="rounded-md" alt={news.title} />
 									<p className="text-sm text-gray-600 mt-1">{news.excerpt}</p>
 								</article>
 							))
