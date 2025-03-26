@@ -7,9 +7,11 @@ import { CATEGORIES } from "@/constantes/categories";
 import AddressInput from "./AdressInput";
 import { useAuth } from "@/hooks/useAuth";
 import { convertToWebP } from "@/utils/convertToWebP";
+import { generateSlug } from "@/utils/generateSlug";
 
 interface BusinessFormData {
   name: string;
+  slug: string;
   address: string;
   telephone: string;
   category: string;
@@ -25,6 +27,7 @@ export default function BusinessRegistrationForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
+    slug: "",
     address: "",
     telephone: "",
     category: "",
@@ -82,17 +85,19 @@ export default function BusinessRegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const slugName = generateSlug(formData.name)
 
     try {
       const businessData = {
         name: formData.name,
+        slug: slugName,
         user_id: user.id,
         address: formData.address,
         telephone: formData.telephone,
         category: formData.category,
         description: formData.description,
         plan: formData.selectedPlan,
-        photos: formData.photos, // Passa os arquivos reais
+        photos: formData.photos, 
       };
 
       const result = await createBusiness(businessData);
