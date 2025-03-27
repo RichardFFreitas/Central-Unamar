@@ -17,6 +17,7 @@ import { AuthContextProvider } from "./hooks/useAuth";
 import { About } from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
 import NewsForm from "./pages/NewsForm";
+import { Analytics } from '@vercel/analytics/react';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <Analytics />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
