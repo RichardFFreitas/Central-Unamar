@@ -3,14 +3,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginPopup from "./LoginPopUp";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useSupabase } from "@/hooks/useSupabase";
-import { Business } from "@/interfaces/Business";
 import Ticker from "./Ticker";
 
 
 
 export default function Header() {
-  const { getBusiness } = useSupabase();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 

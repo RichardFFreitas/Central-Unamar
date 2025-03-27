@@ -218,6 +218,24 @@ export function useSupabase() {
     return publicUrlData?.publicUrl;
   };
 
+  const getUser = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('users') // Nome da tabela de usuários no Supabase
+      .select('nome') // Pegando apenas o nome
+      .eq('id', userId) // Buscando pelo ID
+      .single(); // Retorna apenas um usuário
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao buscar usuario ${error.message}`
+      })
+      return null;
+    }
+
+    return data;
+  };
+
   return {
     getBusiness,
     getBusinesses,
@@ -225,6 +243,7 @@ export function useSupabase() {
     getNews,
     getBusinessBySlug,
     uploadImageNews,
-    createNews
+    createNews,
+    getUser
   };
 }

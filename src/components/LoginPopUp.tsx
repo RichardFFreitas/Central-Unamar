@@ -73,6 +73,7 @@ const LoginPopup = () => {
               </h2>
               <h3 className="mb-4">{user.email}</h3>
               <Link to="/register" className="mb-4 font-bold text-lg text-white bg-primary text-center rounded-md p-2 hover:bg-primary-hover transition-colors">Registrar comércios</Link>
+              <Link to="/news/form" className="mb-4 font-bold text-lg text-white bg-primary text-center rounded-md p-2 hover:bg-primary-hover transition-colors">Criar Notícia</Link>
               <Button
                 className="font-bold text-lg text-white hover:bg-primary-hover transition-colors"
                 onClick={handleSignOut}
