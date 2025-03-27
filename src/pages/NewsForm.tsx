@@ -10,6 +10,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { NewsCategories } from "@/constantes/newsCategories";
 import { convertToWebP } from "@/utils/convertToWebP";
+import NotFound from "./NotFound";
 
 interface NewsFormData {
   title: string;
@@ -111,7 +112,10 @@ export default function NewsRegistrationForm() {
   };
 
   return (
-    <div className="pt-24 pb-16">
+    <>
+    <NotFound />
+    {user && (
+      <div className="pt-24 pb-16">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="bg-white rounded-lg shadow-sm p-6 md:p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -218,5 +222,8 @@ export default function NewsRegistrationForm() {
         </div>
       </div>
     </div>
+    )}
+    </>
+    
   );
 }
