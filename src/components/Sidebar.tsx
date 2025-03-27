@@ -30,7 +30,7 @@ export const Sidebar = () => {
 					<div className="space-y-4">
 					<SearchBar />
 						{allNews.length > 0 ? (
-							allNews.map((news) => (
+							allNews.slice(0, 3).map((news) => (
 								<article className="group" key={news.id}>
 									<h3 className="font-medium transition-all">{news.title}</h3>
 									<img src={news.images} className="rounded-md" alt={news.title} />
@@ -47,10 +47,10 @@ export const Sidebar = () => {
 				< div className="h-px bg-gray-200"></div>
 
 				<section>
-					<h2 className="font-semibold text-lg mb-4">Comércios em Destaque</h2>
+					<h2 className="font-semibold text-lg mb-4">Comércios Recentes</h2>
 					<div className="space-y-4">
 						{businesses.length > 0 ? (
-							businesses.map((business) => (
+							businesses.slice(0, 5).map((business) => (
 								<article className="group flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-all cursor-pointer" key={business.id}>
 									<div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
 										<img className="w-12 h-12 object-cover rounded-full" src={business.photos[0]} alt={`logo da empresa ${business.name}`} />
