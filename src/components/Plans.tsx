@@ -45,8 +45,8 @@ const Plans = () => {
       <section className="py-16 bg-accent">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Plan</h2>
-            <p className="text-gray-600">Select the perfect visibility plan for your business</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Escolha seu plano</h2>
+            <p className="text-gray-600">Selecione o Plano perfeito para o seu comércio</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {SUBSCRIPTION_PLANS.map((plan, index) => (

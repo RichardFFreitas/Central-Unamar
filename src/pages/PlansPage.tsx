@@ -1,7 +1,7 @@
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import Plans from "@/components/Plans";
-import { Helmet } from 'react-helmet-async'; // Importando o Helmet
+import { Helmet } from 'react-helmet-async'; 
 
 const PlansPage = () => {
   return (
