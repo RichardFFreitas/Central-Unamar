@@ -63,35 +63,6 @@ export function useSupabase() {
     return data;
   };
 
-  const uploadBusinessPhoto = async (file: File, businessId: number) => {
-    try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${businessId}-${Date.now()}.${fileExt}`;
-      const filePath = `business_photos/${fileName}`;
-
-      // Upload do arquivo
-      const { error: uploadError } = await supabase.storage
-        .from("Imgs")
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      // Obter URL pública
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("Imgs").getPublicUrl(filePath);
-
-      return publicUrl;
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao fazer upload da foto",
-        variant: "destructive",
-      });
-      return null;
-    }
-  };
-
   const getNews = async (id?: string) => {
     const { data, error } = await supabase
       .from("news")
@@ -105,6 +76,69 @@ export function useSupabase() {
         variant: "destructive",
       });
       return [];
+    }
+    return data;
+  };
+
+  const getReviews = async (business_id: string) => {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*, users(nome)") // Aqui fazemos o join correto com a tabela users
+      .eq("business_id", business_id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao buscar Review ${error.message}`,
+      });
+      return null;
+    }
+    return data;
+  };
+
+  const getUser = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("users") // Nome da tabela de usuários no Supabase
+      .select("nome") // Pegando apenas o nome
+      .eq("id", userId) // Buscando pelo ID
+      .single(); // Retorna apenas um usuário
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao buscar usuario ${error.message}`,
+      });
+      return null;
+    }
+
+    return data;
+  };
+
+  const createReview = async ({
+    businessId,
+    rating,
+    comment,
+    userId,
+  }: {
+    businessId: String;
+    rating: Number;
+    comment: String;
+    userId: String;
+  }) => {
+    const { data, error } = await supabase.from("reviews").insert([
+      {
+        business_id: businessId,
+        rating,
+        comment,
+        user_id: userId,
+      },
+    ]);
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao criar review ${error.message}`,
+      });
     }
     return data;
   };
@@ -153,7 +187,7 @@ export function useSupabase() {
 
   const createNews = async (newsData: any) => {
     const { photo, ...rest } = newsData;
-  
+
     // Criar a notícia primeiro
     const { data: news, error } = await supabase
       .from("news")
@@ -166,7 +200,7 @@ export function useSupabase() {
       ])
       .select()
       .single();
-  
+
     if (error) {
       toast({
         title: "Erro",
@@ -175,7 +209,7 @@ export function useSupabase() {
       });
       return null;
     }
-  
+
     // Upload da foto única
     if (photo) {
       const url = await uploadImageNews(photo.file, news.id);
@@ -186,10 +220,46 @@ export function useSupabase() {
           .eq("id", news.id);
       }
     }
-  
+
     return news;
   };
-  
+
+  const updateReview = async ({ reviewId, rating, comment }: { reviewId: string; rating: number; comment: string; }) => {
+    try {
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const { data, error } = await supabase
+        .from('reviews')
+        .update({ rating, comment })
+        .eq('id', reviewId)
+        .eq('user_id', user.id); // Garante que só o dono da review pode editar
+
+      if (error) throw new Error(error.message);
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao atualizar review:', error);
+      throw error;
+    }
+  };
+
+  const deleteReview = async (reviewId: string) => {
+    try {
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', reviewId)
+        .eq('user_id', user.id); // Garante que só o dono pode excluir
+
+      if (error) throw new Error(error.message);
+    } catch (error) {
+      console.error('Erro ao excluir review:', error);
+      throw error;
+    }
+  };
+
   const uploadImageNews = async (file: File, id?: any) => {
     if (!file) return null;
     const fileName = `${Date.now()}-${file.name}`;
@@ -199,7 +269,7 @@ export function useSupabase() {
         cacheControl: "3600",
         upsert: false,
       });
-  
+
     if (error) {
       toast({
         title: "Erro",
@@ -209,41 +279,56 @@ export function useSupabase() {
     }
     toast({
       title: "Imagem enviada com sucesso",
-      description: `${data}`
+      description: `${data}`,
     });
-  
+
     const { data: publicUrlData } = supabase.storage
       .from("news")
       .getPublicUrl(fileName);
     return publicUrlData?.publicUrl;
   };
 
-  const getUser = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('users') // Nome da tabela de usuários no Supabase
-      .select('nome') // Pegando apenas o nome
-      .eq('id', userId) // Buscando pelo ID
-      .single(); // Retorna apenas um usuário
+  const uploadBusinessPhoto = async (file: File, businessId: number) => {
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${businessId}-${Date.now()}.${fileExt}`;
+      const filePath = `business_photos/${fileName}`;
 
-    if (error) {
+      // Upload do arquivo
+      const { error: uploadError } = await supabase.storage
+        .from("Imgs")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Obter URL pública
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("Imgs").getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
       toast({
         title: "Erro",
-        description: `Erro ao buscar usuario ${error.message}`
-      })
+        description: "Erro ao fazer upload da foto",
+        variant: "destructive",
+      });
       return null;
     }
-
-    return data;
   };
 
   return {
     getBusiness,
     getBusinesses,
-    createBusiness,
+    getReviews,
     getNews,
+    getUser,
     getBusinessBySlug,
-    uploadImageNews,
+    createBusiness,
     createNews,
-    getUser
+    createReview,
+    uploadImageNews,
+    updateReview,
+    deleteReview,
   };
 }

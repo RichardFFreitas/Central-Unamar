@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
-import {
-  Star,
-  MapPin,
-  Phone,
-  LoaderCircle,
-  Facebook,
-  Instagram,
-} from "lucide-react";
+import { Star, MapPin, Phone, LoaderCircle } from "lucide-react";
+import { SiFacebook, SiInstagram } from "@icons-pack/react-simple-icons";
 import { useSupabase } from "@/hooks/useSupabase";
 import { Business } from "@/interfaces/Business";
+import { Reviews } from "@/interfaces/Reviews";
+import ReviewCard from "@/components/ReviewCard";
 import { Helmet } from "react-helmet-async";
+import CreateReview from "@/components/CreateReview";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function BusinessProfile() {
-  const { getBusiness } = useSupabase();
-  const { getBusinessBySlug } = useSupabase();
+  const { getBusinessBySlug, getReviews } = useSupabase();
   const { slug } = useParams();
+  const { user } = useAuth();
   const [business, setBusiness] = useState<Business | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<string>("");
+  const [reviews, setReviews] = useState<Reviews[]>([]);
 
   useEffect(() => {
     const fetchBusiness = async () => {
@@ -31,7 +30,24 @@ export default function BusinessProfile() {
       }
     };
     fetchBusiness();
-  }, [slug, getBusiness]);
+  }, [slug]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!business?.id) return; // Se business for null/undefined, não executa a função
+      const data = await getReviews(business.id);
+      if (data) {
+        setReviews(data);
+      }
+    };
+    fetchReviews();
+  }, [business]);
+
+  const handleReviewAdded = () => {
+    if (business?.id) {
+      getReviews(business.id).then((data) => setReviews(data || []));
+    }
+  };
 
   if (!business) {
     return (
@@ -150,29 +166,28 @@ export default function BusinessProfile() {
                 </div>
 
                 {/* Social Media */}
-
-                {/* <div className="flex space-x-4 mt-6">
-                  {business.socialMedia.facebook && (
+                <div className="flex space-x-4 mt-6">
+                  {business.facebook && (
                     <a
-                      href={`https://facebook.com/${business.socialMedia.facebook}`}
+                      href={`${business.facebook}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 hover:text-primary"
                     >
-                      <Facebook className="w-6 h-6" />
+                      <SiFacebook className="w-8 h-8" />
                     </a>
                   )}
-                  {business.socialMedia.instagram && (
+                  {business.instagram && (
                     <a
-                      href={`https://instagram.com/${business.socialMedia.instagram}`}
+                      href={`${business.instagram}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 hover:text-primary"
                     >
-                      <Instagram className="w-6 h-6" />
+                      <SiInstagram className="w-8 h-8" />
                     </a>
                   )}
-                </div> */}
+                </div>
               </div>
 
               {/* Reviews */}
@@ -180,23 +195,28 @@ export default function BusinessProfile() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Reviews
                 </h2>
-                <div className="space-y-6">
-                  Sem reviews no momento
-                  {/* {business.reviews.map((review) => (
-                  <div key={review.id} className="border-b border-gray-200 last:border-0 pb-6 last:pb-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-gray-900">{review.author}</span>
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-gray-600">{review.rating}</span>
-                      </div>
-                    </div>
-                    <p className="text-gray-600 mb-2">{review.comment}</p>
-                    <span className="text-sm text-gray-500">
-                      {new Date(review.date).toLocaleDateString()}
-                    </span>
+                {user && (
+                  <CreateReview
+                    businessId={business.id}
+                    onReviewAdded={handleReviewAdded}
+                  />
+                )}
+
+                {!user && (
+                  <div className="bg-white rounded-lg shadow-sm p-6 my-8">
+                    <p className="text-gray-500">
+                      Faça login para deixar uma avaliação.
+                    </p>
                   </div>
-                ))} */}
+                )}
+                <div className="space-y-6">
+                  {reviews.length === 0 ? (
+                    <p className="text-gray-600">Sem reviews no momento</p>
+                  ) : (
+                    reviews.map((review) => (
+                      <ReviewCard key={review.id} review={review} onReviewUpdated={handleReviewAdded} />
+                    ))
+                  )}
                 </div>
               </div>
             </div>

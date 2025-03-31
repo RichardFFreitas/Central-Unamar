@@ -2,10 +2,8 @@ export interface Business {
     id: string;
     name: string;
     description?: string;
-    socialMedia?: {
-      facebook: string;
-      instagram: string;
-    }
+    facebook?: string;
+    instagram?: string;
     category: string;
     rating?: number;
     address: string;
