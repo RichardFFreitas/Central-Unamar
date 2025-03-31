@@ -9,6 +9,7 @@ import { ptBR } from "date-fns/locale";
 import { Helmet } from "react-helmet-async";
 import { NewsCategories } from "@/constantes/newsCategories";
 import { LoaderCircle } from "lucide-react";
+import AdSense from "@/components/Adsense";
 
 const CATEGORIES = NewsCategories;
 
@@ -109,6 +110,7 @@ export default function News() {
                 </div>
               )}
             </div>
+            <AdSense/>
           </main>
         </div>
       )}

@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
-import { Star, MapPin, Phone, LoaderCircle } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  Phone,
+  LoaderCircle,
+  Facebook,
+  Instagram,
+} from "lucide-react";
 import { useSupabase } from "@/hooks/useSupabase";
 import { Business } from "@/interfaces/Business";
 import { Helmet } from "react-helmet-async";
@@ -145,27 +152,27 @@ export default function BusinessProfile() {
                 {/* Social Media */}
 
                 {/* <div className="flex space-x-4 mt-6">
-                {business.socialMedia.facebook && (
-                  <a
-                    href={`https://facebook.com/${business.socialMedia.facebook}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-primary"
-                  >
-                    <Facebook className="w-6 h-6" />
-                  </a>
-                )}
-                {business.socialMedia.instagram && (
-                  <a
-                    href={`https://instagram.com/${business.socialMedia.instagram}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-primary"
-                  >
-                    <Instagram className="w-6 h-6" />
-                  </a>
-                )}
-              </div> */}
+                  {business.socialMedia.facebook && (
+                    <a
+                      href={`https://facebook.com/${business.socialMedia.facebook}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-primary"
+                    >
+                      <Facebook className="w-6 h-6" />
+                    </a>
+                  )}
+                  {business.socialMedia.instagram && (
+                    <a
+                      href={`https://instagram.com/${business.socialMedia.instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-primary"
+                    >
+                      <Instagram className="w-6 h-6" />
+                    </a>
+                  )}
+                </div> */}
               </div>
 
               {/* Reviews */}

@@ -5,6 +5,7 @@ import { News } from '@/interfaces/News';
 import { LoaderCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import { Helmet } from 'react-helmet-async';
+import AdSense from '@/components/Adsense';
 
 export default function NewsProfile() {
   const { getNews, getUser } = useSupabase(); // Adicionei getUser
@@ -82,6 +83,7 @@ export default function NewsProfile() {
           </div>
         </div>
       </main>
+      <AdSense />
     </div>
   );
 }

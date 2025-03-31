@@ -12,6 +12,7 @@ const PlansPage = () => {
       </Helmet>
       <Header />
       <Plans />
+      
       <Footer />
     </div>
   );

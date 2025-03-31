@@ -23,6 +23,7 @@ import {
 import { Link } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import AdSense from "@/components/Adsense";
 
 const Index = () => {
   const { getBusinesses, getNews } = useSupabase();
@@ -171,6 +172,7 @@ const Index = () => {
             <div className="absolute right-5 bottom-0 top-[1063px] w-80 z-40 flex flex-col p-6 space-y-4">
               <Sidebar />
             </div>
+            <AdSense />
             <Footer />
           </div>
         </>
