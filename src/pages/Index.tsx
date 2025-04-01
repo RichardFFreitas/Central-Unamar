@@ -11,15 +11,6 @@ import { News } from "@/interfaces/News";
 import NewsCard from "@/components/NewsCard";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import { Helmet } from "react-helmet-async";
