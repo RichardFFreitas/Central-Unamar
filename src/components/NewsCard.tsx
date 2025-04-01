@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { News } from "@/interfaces/News";
 
-export default function NewsCard({id, title, excerpt, category, images, date}: News) {
+export default function NewsCard({ title, excerpt, category, images, date, slug}: News) {
 
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
@@ -29,7 +29,7 @@ export default function NewsCard({id, title, excerpt, category, images, date}: N
         <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-600 mb-4 line-clamp-2">{excerpt}</p>
         <Link
-          to={`/news/${id}`}
+          to={`/news/${slug}`}
           className="text-primary font-medium hover:underline inline-flex items-center"
         >
           Ler a matéria

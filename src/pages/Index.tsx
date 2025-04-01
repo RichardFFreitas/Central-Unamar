@@ -151,6 +151,7 @@ const Index = () => {
                   <NewsCard
                     key={news.id}
                     id={news.id}
+                    slug={news.slug}
                     title={news.title}
                     date={news.date}
                     category={news.category}

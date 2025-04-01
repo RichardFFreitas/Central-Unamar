@@ -1,11 +1,11 @@
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { title } from "process";
 
 export function useSupabase() {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const TIPOS_USUARIO = ["adm", "comercio", "jornalista", "usuario"];
 
   const getBusiness = async (id: string) => {
     const { data, error } = await supabase
@@ -80,6 +80,22 @@ export function useSupabase() {
     return data;
   };
 
+  const getNewsBySlug = async (slug: string) => {
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .eq("slug", slug)
+      .limit(1);
+  
+    if (error) {
+      console.error("Erro ao buscar notícia:", error);
+      return null;
+    }
+  
+    return data;
+  };
+  
+
   const getReviews = async (business_id: string) => {
     const { data, error } = await supabase
       .from("reviews")
@@ -113,6 +129,81 @@ export function useSupabase() {
     }
 
     return data;
+  };
+
+  const signUpUser = async (
+    email: string,
+    password: string,
+    tipo_usuario: string,
+    nome: string
+  ) => {
+    if (!TIPOS_USUARIO.includes(tipo_usuario)) {
+      throw new Error("Tipo de usuário inválido.");
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) throw error;
+
+    // Pegando o ID do usuário criado
+    const userId = data?.user?.id;
+    if (!userId) throw new Error("Erro ao obter ID do usuário.");
+
+    // 🔍 Verifica se o usuário já está cadastrado na tabela pública
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("id", userId)
+      .single();
+
+    if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+
+    if (existingUser) {
+      // Se o usuário já existir, faz um UPDATE nos campos nome e tipo_usuario
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ nome, tipo_usuario })
+        .eq("id", userId);
+
+      if (updateError) throw updateError;
+    } else {
+      // Se não existir, faz o INSERT
+      const { error: insertError } = await supabase
+        .from("users")
+        .insert([{ id: userId, nome, tipo_usuario }]);
+
+      if (insertError) throw insertError;
+    }
+
+    return data;
+  };
+
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: `Erro ao fazer login: ${error.message}`,
+        className: "bg-red-500",
+      });
+      return;
+    }
+
+    if (data.user) {
+      setUser(data.user);
+      toast({
+        title: "Sucesso",
+        description: "Login realizado com sucesso!",
+        className: "bg-green-500",
+      });
+    }
   };
 
   const createReview = async ({
@@ -224,38 +315,46 @@ export function useSupabase() {
     return news;
   };
 
-  const updateReview = async ({ reviewId, rating, comment }: { reviewId: string; rating: number; comment: string; }) => {
+  const updateReview = async ({
+    reviewId,
+    rating,
+    comment,
+  }: {
+    reviewId: string;
+    rating: number;
+    comment: string;
+  }) => {
     try {
-      if (!user) throw new Error('Usuário não autenticado');
+      if (!user) throw new Error("Usuário não autenticado");
 
       const { data, error } = await supabase
-        .from('reviews')
+        .from("reviews")
         .update({ rating, comment })
-        .eq('id', reviewId)
-        .eq('user_id', user.id); // Garante que só o dono da review pode editar
+        .eq("id", reviewId)
+        .eq("user_id", user.id); // Garante que só o dono da review pode editar
 
       if (error) throw new Error(error.message);
 
       return data;
     } catch (error) {
-      console.error('Erro ao atualizar review:', error);
+      console.error("Erro ao atualizar review:", error);
       throw error;
     }
   };
 
   const deleteReview = async (reviewId: string) => {
     try {
-      if (!user) throw new Error('Usuário não autenticado');
+      if (!user) throw new Error("Usuário não autenticado");
 
       const { error } = await supabase
-        .from('reviews')
+        .from("reviews")
         .delete()
-        .eq('id', reviewId)
-        .eq('user_id', user.id); // Garante que só o dono pode excluir
+        .eq("id", reviewId)
+        .eq("user_id", user.id);
 
       if (error) throw new Error(error.message);
     } catch (error) {
-      console.error('Erro ao excluir review:', error);
+      console.error("Erro ao excluir review:", error);
       throw error;
     }
   };
@@ -322,8 +421,11 @@ export function useSupabase() {
     getBusinesses,
     getReviews,
     getNews,
+    getNewsBySlug,
     getUser,
     getBusinessBySlug,
+    signUpUser,
+    signIn,
     createBusiness,
     createNews,
     createReview,

@@ -7,20 +7,20 @@ import Header from '@/components/Header';
 import { Helmet } from 'react-helmet-async';
 
 export default function NewsProfile() {
-  const { getNews, getUser } = useSupabase(); // Adicionei getUser
+  const { getNewsBySlug, getUser } = useSupabase(); 
   const [news, setNews] = useState<News | null>(null);
-  const [author, setAuthor] = useState<string | null>(null); // Estado para o autor
+  const [author, setAuthor] = useState<string | null>(null); 
   const [selectedPhoto, setSelectedPhoto] = useState<string>("");
-  const { id } = useParams();
+  const { slug } = useParams();
 
   useEffect(() => {
     const fetchNews = async () => {
-      if (id) {
-        const data = await getNews(id);
+      if (slug) {
+        const data = await getNewsBySlug(slug);
         if (data && data.length > 0) {
           setNews(data[0]);
           setSelectedPhoto(data[0].images);
-          fetchAuthor(data[0].user_id); // Buscar o autor
+          fetchAuthor(data[0].user_id); 
         }
       }
     };
@@ -33,7 +33,7 @@ export default function NewsProfile() {
     };
 
     fetchNews();
-  }, [id]);
+  }, [slug]);
 
   if (!news) {
     return(
