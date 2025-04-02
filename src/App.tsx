@@ -17,7 +17,9 @@ import { AuthContextProvider } from "./hooks/useAuth";
 import { About } from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
 import NewsForm from "./pages/NewsForm";
+import UserRegister from "./pages/UserRegister";
 import { Analytics } from '@vercel/analytics/react';
+import UserLogin from "./pages/UserLogin";
 
 const queryClient = new QueryClient();
 
@@ -38,10 +40,12 @@ const App = () => (
                 <Route path="/business/:slug" element={<BusinessProfile />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/news/form" element={<NewsForm />} />
-                <Route path="/news/:id" element={<NewsProfile />} />
+                <Route path="/news/:slug" element={<NewsProfile />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/plans" element={<PlansPage />} />
+                <Route path="/user/register" element={<UserRegister />} />
+                <Route path="/user/login" element={<UserLogin />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
