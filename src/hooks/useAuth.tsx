@@ -11,6 +11,8 @@ import { supabase } from "@/lib/supabase";
 interface User {
   id: string;
   email?: string;
+  nome?: string;
+  tipo_usuario?: string;
   // outros campos do usuário
 }
 
@@ -33,22 +35,25 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   useEffect(() => {
     const getUser = async () => {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-      }
-    };
-    const checkSession = async () => {
-      const {
         data: { session },
       } = await supabase.auth.getSession();
-
       if (session) {
-        getUser()
+        const userId = session.user.id;  
+  
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)  
+          .single();  
+  
+        if (error) {
+          console.error("Erro ao buscar usuário:", error);
+          return;
+        }
+        setUser(data);  
       }
     };
-    checkSession()
+    getUser();
   }, []);
 
   return (
@@ -58,7 +63,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   );
 }
 
-// Hook para consumir o contexto
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

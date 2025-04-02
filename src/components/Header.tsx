@@ -1,21 +1,15 @@
 import { Menu, Search, X, User2Icon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import LoginPopup from "./LoginPopUp";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Ticker from "./Ticker";
-
-
+import { useAuth } from "@/hooks/useAuth";
+import { MiniUserProfile } from "./MiniUserProfile";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
-
-  const toggleLoginPopup = () => {
-    setIsLoginPopupOpen((prev) => !prev);
-  };
-
-  
+  const { user } = useAuth();
 
   return (
     <>
@@ -66,21 +60,26 @@ export default function Header() {
               >
                 Contato
               </Link>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <User2Icon className="text-white cursor-pointer"/>
-                </PopoverTrigger>
+              {user ? (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <User2Icon className="text-white cursor-pointer" />
+                  </PopoverTrigger>
 
-                <PopoverContent
-                  align="center"
-                  sideOffset={4}
-                  className="w-80 p-4 bg-white rounded-md shadow-lg"
-                >
-                  <LoginPopup />
-                </PopoverContent>
-              </Popover>
+                  <PopoverContent
+                    align="center"
+                    sideOffset={4}
+                    className="w-80 p-4 bg-white rounded-md shadow-lg"
+                  >
+                    <MiniUserProfile />
+                  </PopoverContent>
+                </Popover>
+              ) : (
+                <Link to="/user/login">
+                  <User2Icon className="text-white cursor-pointer" />
+                </Link>
+              )}
             </nav>
-            {isLoginPopupOpen && <LoginPopup />}
 
             {/* Mobile Menu Button */}
             <button
@@ -100,10 +99,7 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-b border-gray-200 animate-fade-in">
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-              <Link
-                to="/"
-                className=" hover:text-primary transition-colors"
-              >
+              <Link to="/" className=" hover:text-primary transition-colors">
                 Home
               </Link>
               <Link
@@ -136,18 +132,10 @@ export default function Header() {
               >
                 Contato
               </Link>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <span>Fazer login</span>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="center"
-                  sideOffset={4}
-                  className="w-80 p-4 bg-white rounded-md shadow-lg"
-                >
-                  <LoginPopup />
-                </PopoverContent>
-              </Popover>
+
+              <Link to="/user/login">
+                <span>Fazer login</span>
+              </Link>
             </nav>
           </div>
         )}
