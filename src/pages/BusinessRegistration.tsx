@@ -16,6 +16,10 @@ export default function BusinessRegistration() {
     loadData();
   }, []);
 
+  if (!user || (user.tipo_usuario !== "adm")) {
+      return <NotFound />;
+    }
+
   return (
     <div>
       {user && (
@@ -35,11 +39,6 @@ export default function BusinessRegistration() {
               </div>
             </div>
           </main>
-        </div>
-      )}
-      {!user && (
-        <div>
-          <NotFound />
         </div>
       )}
     </div>

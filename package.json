@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "mkdir -p dist",
+    "prebuild": "mkdir -p dist && node scripts/generateRoutes.js",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postbuild": "curl https://www.google.com/ping?sitemap=https://www.central-unamar.com.br/sitemap.xml"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

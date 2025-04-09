@@ -122,6 +122,11 @@ export default function NewsRegistrationForm() {
     }
   };
 
+  if (!user || (user.tipo_usuario !== "adm" && user.tipo_usuario !== "jornalista")) {
+    return <NotFound />;
+  }
+  
+
   return (
     <>
       {!user && (

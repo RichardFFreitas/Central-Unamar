@@ -152,8 +152,6 @@ export default function CadastroUsuario() {
                       required
                     >
                       <option value="usuario">Usuário</option>
-                      <option value="comercio">Comércio</option>
-                      <option value="jornalista">Jornalista</option>
                     </select>
                   </div>
                 </div>

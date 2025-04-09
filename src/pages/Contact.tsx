@@ -17,7 +17,7 @@ export default function Contact() {
 
     emailjs
       .send(
-        "service_f4rpzze",
+        "service_ulmin2r",
         "template_xeb2s3q",
         {
           from_name: formData.name,
@@ -69,7 +69,7 @@ export default function Contact() {
                       <Mail className="w-6 h-6 flex-shrink-0" />
                       <div>
                         <p className="font-medium">Email</p>
-                        <p className="mt-1">contact@centralunamar.com</p>
+                        <p className="mt-1">contato@centralunamar.com</p>
                       </div>
                     </div>
                   </div>
