@@ -107,6 +107,7 @@ export default function Businesses() {
 
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="w-full md:w-auto">
+                  <h3 className="font-bold">Categorias</h3>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
@@ -120,6 +121,7 @@ export default function Businesses() {
                   </select>
                 </div>
                 <div className="w-full md:w-auto">
+                <h3 className="font-bold">Bairros</h3>
                   <select
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
