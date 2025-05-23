@@ -31,6 +31,12 @@ export default function Header() {
                 Home
               </Link>
               <Link
+                to="/sorteio"
+                className="text-white hover:text-primary transition-colors"
+              >
+                Sorteio
+              </Link>
+              <Link
                 to="/businesses"
                 className="text-white hover:text-primary transition-colors"
               >
@@ -101,6 +107,12 @@ export default function Header() {
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
               <Link to="/" className=" hover:text-primary transition-colors">
                 Home
+              </Link>
+              <Link
+                to="/sorteio"
+                className=" hover:text-primary transition-colors"
+              >
+                Sorteio
               </Link>
               <Link
                 to="/businesses"

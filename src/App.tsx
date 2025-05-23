@@ -20,6 +20,7 @@ import NewsForm from "./pages/NewsForm";
 import UserRegister from "./pages/UserRegister";
 import { Analytics } from '@vercel/analytics/react';
 import UserLogin from "./pages/UserLogin";
+import SortitionPage from "./pages/SortitionPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/register" element={<BusinessRegistration />} />
                 <Route path="/businesses" element={<Businesses />} />
+                <Route path="/sorteio" element={<SortitionPage />} />
                 <Route path="/business/:slug" element={<BusinessProfile />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/news/form" element={<NewsForm />} />
