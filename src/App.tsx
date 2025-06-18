@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,8 @@ import NewsProfile from "./pages/NewsProfile";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import PlansPage from "./pages/PlansPage";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCanceled from "./pages/PaymentCanceled";
 import { AuthContextProvider } from "./hooks/useAuth";
 import { About } from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
@@ -46,6 +49,8 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/plans" element={<PlansPage />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/payment-canceled" element={<PaymentCanceled />} />
                 <Route path="/user/register" element={<UserRegister />} />
                 <Route path="/user/login" element={<UserLogin />} />
                 <Route path="*" element={<NotFound />} />

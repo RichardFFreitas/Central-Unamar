@@ -1,15 +1,34 @@
 
 import { Check } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface PlanCardProps {
   name: string;
   price: string;
   features: string[];
   isPopular?: boolean;
-  link: string;
+  planType: "basic" | "professional" | "enterprise";
 }
 
-export default function PlanCard({ name, price, features, isPopular, link }: PlanCardProps) {
+export default function PlanCard({ name, price, features, isPopular, planType }: PlanCardProps) {
+  const handleCheckout = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { plan: planType }
+      });
+
+      if (error) throw error;
+
+      // Open Stripe checkout in a new tab
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      alert('Erro ao processar pagamento. Tente novamente.');
+    }
+  };
+
   return (
     <div className={`relative bg-white rounded-lg ${isPopular ? 'ring-2 ring-primary shadow-lg' : 'border border-gray-200'} p-6 animate-fade-up`}>
       {isPopular && (
@@ -32,11 +51,12 @@ export default function PlanCard({ name, price, features, isPopular, link }: Pla
           </li>
         ))}
       </ul>
-      <a href={link}  >
-        <button className={`mt-8 w-full py-3 px-4  ${isPopular ? 'bg-primary hover:bg-primary-hover text-white' : 'bg-accent hover:bg-accent-hover text-primary'} font-medium rounded-lg transition-colors`}>
+      <button 
+        onClick={handleCheckout}
+        className={`mt-8 w-full py-3 px-4 ${isPopular ? 'bg-primary hover:bg-primary-hover text-white' : 'bg-accent hover:bg-accent-hover text-primary'} font-medium rounded-lg transition-colors`}
+      >
         Iniciar
-        </button>
-      </a>
+      </button>
     </div>
   );
 }

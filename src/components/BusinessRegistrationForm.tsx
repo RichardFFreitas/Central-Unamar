@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, Upload, X } from "lucide-react";
 import { CATEGORIES } from "@/constantes/categories";
 import AddressInput from "./AdressInput";
@@ -25,6 +25,7 @@ export default function BusinessRegistrationForm() {
   const { toast } = useToast();
   const { createBusiness } = useSupabase();
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
     slug: "",
@@ -36,6 +37,17 @@ export default function BusinessRegistrationForm() {
     photos: [],
   });
 
+  // Check if user came from payment
+  useEffect(() => {
+    if (location.state?.fromPayment && location.state?.sessionId) {
+      // User came from successful payment - could verify session here if needed
+      toast({
+        title: "Plano Ativado",
+        description: "Seu plano foi ativado com sucesso! Complete o cadastro do seu comércio.",
+        className: "bg-green-500 text-white"
+      });
+    }
+  }, [location.state, toast]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -156,6 +168,14 @@ export default function BusinessRegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {location.state?.fromPayment && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <p className="text-green-800 text-sm">
+            ✅ Pagamento confirmado! Complete o cadastro do seu comércio abaixo.
+          </p>
+        </div>
+      )}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700">Nome do Comércio</label>
         <input

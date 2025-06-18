@@ -1,19 +1,21 @@
+
 import PlanCard from "@/components/PlanCard";
 
 const SUBSCRIPTION_PLANS = [
   {
     name: "Basico",
     price: "24,99",
+    planType: "basic" as const,
     features: [
       "Lista dos Comércios",
       "Link do Whatsapp",
       "1 Foto do comércio.",
     ],
-    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2024%2C90",
   },
   {
     name: "Professional",
     price: "54,99",
+    planType: "professional" as const,
     features: [
       "Lista dos comércios",
       "5 fotos de divulgação",
@@ -21,11 +23,11 @@ const SUBSCRIPTION_PLANS = [
       "Suporte Prioritário",
     ],
     isPopular: true,
-    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2054%2C90",
   },
   {
     name: "Enterprise",
     price: "74,99",
+    planType: "enterprise" as const,
     features: [
       "Listagem de Comércios VIPs",
       "10 fotos de divulgação",
@@ -35,7 +37,6 @@ const SUBSCRIPTION_PLANS = [
       "Pagina Própria",
       "Integração com redes sociais"
     ],
-    link: "https://wa.me/5522997586193?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20de%20R%24%2074%2C90",
   },
 ];
 
