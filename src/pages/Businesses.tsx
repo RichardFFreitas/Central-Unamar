@@ -54,17 +54,24 @@ export default function Businesses() {
     window.scrollTo({ top: 400, behavior: "smooth" });
   };
 
-  const filteredBusinesses = businesses.filter((business) => {
-    const matchesSearch = business.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "Todos" || business.category === selectedCategory;
-    const matchesLocation =
-      selectedLocation === "Todos" ||
-      business.address.includes(selectedLocation);
-    return matchesSearch && matchesCategory && matchesLocation;
-  });
+  const filteredBusinesses = businesses
+    .filter((business) => {
+      const matchesSearch = business.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "Todos" || business.category === selectedCategory;
+      const matchesLocation =
+        selectedLocation === "Todos" ||
+        business.address.includes(selectedLocation);
+      return matchesSearch && matchesCategory && matchesLocation;
+    })
+    .sort((a, b) => {
+      // Empresas em destaque (enterprise) aparecem primeiro
+      if (a.plan === "enterprise" && b.plan !== "enterprise") return -1;
+      if (a.plan !== "enterprise" && b.plan === "enterprise") return 1;
+      return 0;
+    });
 
   const totalPages = Math.ceil(filteredBusinesses.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
